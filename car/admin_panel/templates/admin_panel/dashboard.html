@@ -1,0 +1,634 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+
+<div class="col-12 d-flex flex-wrap">
+    <div class="col-12 col-lg">
+        {% include "partials/sidenav.html" %}
+    </div>
+    <div class="main_content">
+        <div class="col-12 p-2">
+            <h4>Dashboard</h4>
+        </div>
+
+        <div class="d-flex flex-wrap p-1">
+            <!-- REGISTERED USERS -->
+            <div class="col-6 col-md-4 col-lg-3 p-1">
+                <div class="bg-white p-3 d-flex align-items-center shadow">
+                    <div class="px-0 px-md-2 me-3">
+                        <h3 class="fas fa-user-circle" style="color: #D5CCF9; font-size: 35px;"></h3>
+                    </div>
+                    <div class="col pe-0 pe-md-3">
+                        <h4 style="line-height: 1em;">{{users.count}}</h4>
+                        <small style="line-height: 0.5em;" class="text-muted">Registered users</small>
+                    </div>
+                </div>
+            </div>
+            <!-- TOTAL VEHICLES -->
+            <div class="col-6 col-md-4 col-lg-3 p-1">
+                <div class="bg-white p-3 d-flex align-items-center shadow">
+                    <div class="px-0 px-md-2 me-3">
+                        <h3 class="fas fa-car" style="color: #83D7DD; font-size: 35px;"></h3>
+                    </div>
+                    <div class="col pe-0 pe-md-3">
+                        <h4 style="line-height: 1em;">{{total_no_of_vehicles}}</h4>
+                        <small style="line-height: 0.5em;" class="text-muted">Total vehicles</small>
+                    </div>
+                </div>
+            </div>
+            <!-- TOTAL BOOKINGS TODAY -->
+            <div class="col-6 col-md-4 col-lg-3 p-1">
+                <div class="bg-white p-3 d-flex align-items-center shadow">
+                    <div class="px-0 px-md-2 me-3">
+                        <h3 class="fas fa-book-open" style="color: #373B54; font-size: 35px;"></h3>
+                    </div>
+                    <div class="col pe-0 pe-md-3">
+                        <h4 style="line-height: 1em;">{{booking_count}}</h4>
+                        <small style="line-height: 0.5em;" class="text-muted">Bookings today</small>
+                    </div>
+                </div>
+            </div>
+            <!-- AVAILABLE VEHICLES -->
+            <div class="col-6 col-md-4 col-lg-3 p-1">
+                <div class="bg-white p-3 d-flex align-items-center shadow">
+                    <div class="px-0 px-md-2 me-3">
+                        <h3 class="fas fa-car-on" style="color: #839bdd; font-size: 35px;"></h3>
+                    </div>
+                    <div class="col pe-0 pe-md-3">
+                        <h4 style="line-height: 1em;">{{available_vehicles}}</h4>
+                        <small style="line-height: 0.5em;" class="text-muted">Available vehicles</small>
+                    </div>
+                </div>
+            </div>
+            <!-- CUSTOMER QUERIES -->
+            <div class="col-6 col-md-4 col-lg-3 p-1">
+                <div class="bg-white p-3 d-flex align-items-center shadow">
+                    <div class="px-0 px-md-2 me-3">
+                        <h3 class="far fa-circle-question" style="color: #FFA14C; font-size: 35px;"></h3>
+                    </div>
+                    <div class="col pe-0 pe-md-3">
+                        <h4 style="line-height: 1em;">{{queries.count}}</h4>
+                        <small style="line-height: 0.5em;" class="text-muted">Customer queries</small>
+                    </div>
+                </div>
+            </div>
+            <!-- REVENUE -->
+            <div class="col-6 col-md-4 col-lg-3 p-1">
+                <div class="bg-white p-3 d-flex align-items-center shadow">
+                    <div class="px-0 px-md-2 me-3">
+                        <h3 class="fas fa-dollar-sign" style="color: #ff4c4c; font-size: 35px;"></h3>
+                    </div>
+                    <div class="col pe-0 pe-md-3">
+                        <h4 style="line-height: 1em;">{{revenue}}</h4>
+                        <small style="line-height: 0.5em;" class="text-muted">Revenue (today)</small>
+                    </div>
+                </div>
+            </div>
+            <!-- NEW USERS -->
+            <div class="col-6 col-md-4 col-lg-3 p-1">
+                <div class="bg-white p-3 d-flex align-items-center shadow">
+                    <div class="px-0 px-md-2 me-3">
+                        <h3 class="far fa-user" style="color: #bdfac5; font-size: 35px;"></h3>
+                    </div>
+                    <div class="col pe-0 pe-md-3">
+                        <h4 style="line-height: 1em;">{{new_users}}</h4>
+                        <small style="line-height: 0.5em;" class="text-muted">New users</small>
+                    </div>
+                </div>
+            </div>
+            <!-- Active BOOKINGS TODAY -->
+            <div class="col-6 col-md-4 col-lg-3 p-1">
+                <div class="bg-white p-3 d-flex align-items-center shadow">
+                    <div class="px-0 px-md-2 me-3">
+                        <h3 class="fas fa-book-open-reader" style="color: #53250a; font-size: 35px;"></h3>
+                    </div>
+                    <div class="col pe-0 pe-md-3">
+                        <h4 style="line-height: 1em;">{{active_bookings}}</h4>
+                        <small style="line-height: 0.5em;" class="text-muted">Active bookings</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- DASHBOARD GRAPH -->
+        <div class="col mx-2 my-3 bg-white shadow-sm">
+            <!-- PULLING OUT ALL THE DATA -->
+            <ul class="d-none">
+                {% for revenue in revenue_list %}
+                <li id="day{{forloop.counter}}">{{revenue}}</li>
+                {% endfor %}
+                {% for last_week_revenue in last_week_revenue_list %}
+                <li id="last_week_day{{forloop.counter}}">{{last_week_revenue}}</li>
+                {% endfor %}
+                {% for bookings in bookings_this_week %}
+                <li id="bookings_day{{forloop.counter}}">{{bookings}}</li>
+                {% endfor %}
+                {% for bookings in bookings_last_week %}
+                <li id="last_week_bookings_day{{forloop.counter}}">{{bookings}}</li>
+                {% endfor %}
+                {% for revenue in revenue_list_month %}
+                <li id="month{{forloop.counter}}">{{revenue}}</li>
+                {% endfor %}
+                {% for last_year_month_revenue in last_month_revenue_list %}
+                <li id="last_month{{forloop.counter}}">{{last_year_month_revenue}}</li>
+                {% endfor %}
+                {% for bookings in bookings_this_month %}
+                <li id="month_booking{{forloop.counter}}">{{bookings}}</li>
+                {% endfor %}
+                {% for bookings in bookings_last_month %}
+                <li id="last_month_booking{{forloop.counter}}">{{bookings}}</li>
+                {% endfor %}
+            </ul>
+            <!-- THIS AND LAST WEEK -->
+            <div class="splide col-12">
+                <div class="splide__track">
+                    <ul class="splide__list">
+
+                        <div class="col-12 splide__slide" id="week_graph">
+                            <div class="d-flex flex-wrap">
+                                <div class="col d-block d-md-flex">
+                                    <div class="d-flex align-items-center p-3">
+                                        <small class="me-2">Revenue WTD (Week To Date):</small>
+                                        <h5>$<span id="total_revenue_this_week">0</span></h5>
+                                    </div>
+                                    <div class="d-flex align-items-center p-3">
+                                        <small class="me-2">Revenue LW (Last Week):</small>
+                                        <h5>$<span id="total_revenue_last_week">0</span></h5>
+                                    </div>
+                                </div>
+                                <div class="col d-block d-md-flex">
+                                    <div class="d-flex align-items-center p-3">
+                                        <small class="me-2">Bookings WTD (Week To Date):</small>
+                                        <h5><span id="total_bookings_this_week">0</span></h5>
+                                    </div>
+                                    <div class="d-flex align-items-center p-3">
+                                        <small class="me-2">Bookings LW (Last Week):</small>
+                                        <h5><span id="total_bookings_last_week">0</span></h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-block d-md-flex col-12" style="overflow: hidden;">
+                                <!-- THIS WEEK'S REVENUE GRAPH -->
+                                <div id="rev" class="col-12 col-md-6 p-0 mx-auto"></div>
+                                <!-- THIS WEEK'S BOOKING GRAPH -->
+                                <div id="vol" class="col-12 col-md-6 p-0 mx-auto"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 splide__slide" id="month_graph">
+                            <div class="d-flex flex-wrap">
+                                <div class="col d-block d-md-flex">
+                                    <div class="d-flex align-items-center p-3">
+                                        <small class="me-2">Revenue MTD (Month To Date):</small>
+                                        <h5>$<span id="total_revenue_this_month">0</span></h5>
+                                    </div>
+                                    <div class="d-flex align-items-center p-3">
+                                        <small class="me-2">Revenue LM (Last Month):</small>
+                                        <h5>$<span id="total_revenue_last_month">0</span></h5>
+                                    </div>
+                                </div>
+                                <div class="col d-block d-md-flex">
+                                    <div class="d-flex align-items-center p-3">
+                                        <small class="me-2">Bookings MTD (Month To Date):</small>
+                                        <h5><span id="total_bookings_this_month">0</span></h5>
+                                    </div>
+                                    <div class="d-flex align-items-center p-3">
+                                        <small class="me-2">Bookings LM (Last Month):</small>
+                                        <h5><span id="total_bookings_last_month">0</span></h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-block d-md-flex col-12" style="overflow: hidden;">
+                                <!-- THIS WEEK'S REVENUE GRAPH -->
+                                <div id="rev_y" class="col-12 col-md-6 p-0 mx-auto"></div>
+                                <!-- THIS WEEK'S BOOKING GRAPH -->
+                                <div id="vol_y" class="col-12 col-md-6 p-0 mx-auto"></div>
+                            </div>
+                        </div>
+
+                    </ul>
+                    <div class="splide__arrows splide__arrows--ltr d-flex justify-content-center">
+                        <button class="splide__arrow splide__arrow--prev bg-transparent" style="position: static;" type="button" aria-label="Previous slide"
+                            aria-controls="splide01-track">
+                            <i class="fas fa-angle-left fs-3"></i>
+                        </button>
+                        <button class="splide__arrow splide__arrow--next bg-transparent" style="position: static;" type="button" aria-label="Next slide"
+                            aria-controls="splide01-track">
+                            <i class="fas fa-angle-right fs-3"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-12 p-2 mt-4">
+            <h4>Today's Trips</h4>
+        </div>
+
+        <div class="col-12 p-1">
+
+            <!-- BOOKINGS -->
+
+            <span class="col-12 py-5 my-5 text-dark d-none no_bookings text-center">There are no bookings for
+                today</span>
+
+            <div class="col-12 d-flex flex-wrap">
+                {% for booking in bookings %}
+                <div class="col-12 col-md-6 col-lg-4 p-2 d-none bookings">
+                    <div class="p-3 bg-white card border-0 shodow-sm">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h5 style="font-size: 19px;"><a href="{% url 'booking_details' booking.id %}"
+                                    class="text-decoration-none">#{{booking.id}}</a></h5>
+                            <a class="text-danger" href="{% url 'delete_booking' booking.id %}"><i
+                                    class="fas fa-trash"></i></a>
+                        </div>
+                        <div class="d-flex align-items-center pt-3">
+
+                            {% if booking.user.profile_image %}
+                            <img src="{{booking.user.profile_image.url}}" alt="" width="35px" height="35px" class="me-3"
+                                style="border-radius: 50%;">
+                            {% else %}
+                            <img src="{% static 'images/user_icon.png' %}" alt="" width="35px" height="35px"
+                                class="me-3" style="border-radius: 50%;">
+                            {% endif %}
+
+                            <h5 style="font-size: 19px;">{{booking.user.username}}</h5>
+                        </div>
+                        <div class="pt-3 d-flex align-items-center">
+                            <span class="text-secondary">Pick-Up Date:</span>
+                            <span class="text-secondary ms-auto p_u_d">{{booking.pick_up_date}}</span>
+                        </div>
+                        <div class="d-flex justify-content-between py-3">
+                            <span class="text-muted">Status:</span>
+
+                            {% if booking.completed %}
+                            <div class="px-2" style="background: #00ff155d; border-radius: 10px;"><small
+                                    class="text-success">Completed</small></div>
+                            {% else %}
+                            {% if booking.confirmed %}
+                            <div class="px-2" style="background: #ffbb005d; border-radius: 10px;"><small
+                                    class="text-warning">Active</small></div>
+                            {% else %}
+                            <div class="px-2" style="background: #8686865d; border-radius: 10px;"><small
+                                    class="text-secondary">Inactive</small></div>
+                            {% endif %}
+                            {% endif %}
+
+                        </div>
+                        <div class="d-flex flex-wrap align-items-center">
+                            <span class="text-muted col mb-2">Actions:</span>
+
+                            {% if booking.completed %}
+                            <a href="{% url 'complete_booking' booking.id %}" class="px-2 text-decoration-none"
+                                style="background: #8686865d; border-radius: 10px;"><small
+                                    class="text-secondary">Booking Incomplete</small></a>
+                            {% else %}
+                            {% if booking.confirmed %}
+                            <a href="{% url 'cancel_booking' booking.id %}" class="px-2 me-1 text-decoration-none"
+                                style="background: #ff00005d; border-radius: 10px;"><small class="text-danger">Cancel
+                                    Booking</small></a>
+                            <a href="{% url 'complete_booking' booking.id %}" class="px-2 text-decoration-none"
+                                style="background: #00ff155d; border-radius: 10px;"><small class="text-success">Complete
+                                    Booking</small></a>
+                            {% else %}
+                            <a href="{% url 'confirm_booking' booking.id %}" class="px-2 text-decoration-none"
+                                style="background: #00ff155d; border-radius: 10px;"><small class="text-success">Confirm
+                                    Booking</small></a>
+                            {% endif %}
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    pick_up_dates = $(".p_u_d")
+
+    for (let i = 0; i < pick_up_dates.length; i++) {
+        date = $(pick_up_dates[i]).text().split(',')[0] + $(pick_up_dates[i]).text().split(',')[1]
+        month = new Date().getMonth()
+        months = ['Jan.', 'Feb.', 'Mar.', 'April.', 'May.', 'June.', 'July.', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.']
+        day = new Date().getDate()
+        year = new Date().getFullYear()
+        if (date.includes(months[month] + " " + day + " " + year)) {
+            $(pick_up_dates[i].parentElement.parentElement.parentElement).removeClass("d-none").addClass("d-block")
+        }
+    }
+
+    bookings = $(".bookings.d-block")
+
+    if (bookings.length == 0) {
+        $(".no_bookings").removeClass("d-none")
+    }
+
+    new Splide('.splide').mount();
+
+    var total_revenue = parseInt($("#day1").text()) + parseInt($("#day2").text()) + parseInt($("#day3").text()) +
+        parseInt($("#day4").text()) + parseInt($("#day5").text()) + parseInt($("#day6").text()) + parseInt($("#day7")
+            .text())
+    var total_revenue_last_week = parseInt($("#last_week_day1").text()) + parseInt($("#last_week_day2").text()) +
+        parseInt($("#last_week_day3").text()) +
+        parseInt($("#last_week_day4").text()) + parseInt($("#last_week_day5").text()) + parseInt($("#last_week_day6")
+            .text()) + parseInt($("#last_week_day7")
+            .text())
+    var total_bookings = parseInt($("#bookings_day1").text()) + parseInt($("#bookings_day2").text()) + parseInt($(
+            "#bookings_day3").text()) +
+        parseInt($("#bookings_day4").text()) + parseInt($("#bookings_day5").text()) + parseInt($("#bookings_day6")
+            .text()) + parseInt($("#bookings_day7")
+            .text())
+    var total_bookings_last_week = parseInt($("#last_week_bookings_day1").text()) + parseInt($(
+            "#last_week_bookings_day2").text()) +
+        parseInt($("#last_week_bookings_day3").text()) +
+        parseInt($("#last_week_bookings_day4").text()) + parseInt($("#last_week_bookings_day5").text()) + parseInt($(
+                "#last_week_bookings_day6")
+            .text()) + parseInt($("#last_week_bookings_day7")
+            .text())
+    var total_revenue_in_month = parseInt($("#month1").text()) + parseInt($("#month2").text()) + parseInt($("#month3")
+            .text()) + parseInt($("#month4").text()) + parseInt($("#month5").text()) + parseInt($("#month6").text()) +
+        parseInt($("#month7").text()) + parseInt($("#month8").text()) + parseInt($("#month9").text()) + parseInt($(
+            "#month10").text()) + parseInt($("#month11").text()) + parseInt($("#month12").text()) + parseInt($(
+            "#month31").text()) + parseInt($("#month30").text()) + parseInt($("#month29").text()) + parseInt($(
+            "#month28").text()) + parseInt($("#month27").text()) + parseInt($("#month26").text()) + parseInt($(
+            "#month25").text()) + parseInt($("#month24").text()) + parseInt($("#month23").text()) + parseInt($(
+            "#month22").text()) + parseInt($("#month21").text()) + parseInt($("#month20").text()) + parseInt($(
+            "#month19").text()) + parseInt($("#month18").text()) + parseInt($("#month17").text()) + parseInt($(
+            "#month16").text()) + parseInt($("#month15").text()) + parseInt($("#month14").text()) + parseInt($(
+            "#month13").text())
+    var total_revenue_last_month = parseInt($("#last_month1").text()) + parseInt($("#last_month2").text()) + parseInt($(
+                "#last_month3")
+            .text()) + parseInt($("#last_month4").text()) + parseInt($("#last_month5").text()) + parseInt($(
+            "#last_month6").text()) +
+        parseInt($("#last_month7").text()) + parseInt($("#last_month8").text()) + parseInt($("#last_month9").text()) +
+        parseInt($(
+            "#last_month10").text()) + parseInt($("#last_month11").text()) + parseInt($("#last_month12").text()) +
+        parseInt($(
+            "#last_month31").text()) + parseInt($("#last_month30").text()) + parseInt($("#last_month29").text()) +
+        parseInt($(
+            "#last_month28").text()) + parseInt($("#last_month27").text()) + parseInt($("#last_month26").text()) +
+        parseInt($(
+            "#last_month25").text()) + parseInt($("#last_month24").text()) + parseInt($("#last_month23").text()) +
+        parseInt($(
+            "#last_month22").text()) + parseInt($("#last_month21").text()) + parseInt($("#last_month20").text()) +
+        parseInt($(
+            "#last_month19").text()) + parseInt($("#last_month18").text()) + parseInt($("#last_month17").text()) +
+        parseInt($(
+            "#last_month16").text()) + parseInt($("#last_month15").text()) + parseInt($("#last_month14").text()) +
+        parseInt($(
+            "#last_month13").text())
+    var total_bookings_in_month = parseInt($("#month_booking1").text()) + parseInt($("#month_booking2").text()) +
+        parseInt($("#month_booking3")
+            .text()) + parseInt($("#month_booking4").text()) + parseInt($("#month_booking5").text()) + parseInt($(
+            "#month_booking6").text()) +
+        parseInt($("#month_booking7").text()) + parseInt($("#month_booking8").text()) + parseInt($("#month_booking9")
+            .text()) + parseInt($(
+            "#month_booking10").text()) + parseInt($("#month_booking11").text()) + parseInt($("#month_booking12")
+            .text()) + parseInt($(
+            "#month_booking31").text()) + parseInt($("#month_booking30").text()) + parseInt($("#month_booking29")
+            .text()) + parseInt($(
+            "#month_booking28").text()) + parseInt($("#month_booking27").text()) + parseInt($("#month_booking26")
+            .text()) + parseInt($(
+            "#month_booking25").text()) + parseInt($("#month_booking24").text()) + parseInt($("#month_booking23")
+            .text()) + parseInt($(
+            "#month_booking22").text()) + parseInt($("#month_booking21").text()) + parseInt($("#month_booking20")
+            .text()) + parseInt($(
+            "#month_booking19").text()) + parseInt($("#month_booking18").text()) + parseInt($("#month_booking17")
+            .text()) + parseInt($(
+            "#month_booking16").text()) + parseInt($("#month_booking15").text()) + parseInt($("#month_booking14")
+            .text()) + parseInt($(
+            "#month_booking13").text())
+    var total_bookings_last_month = parseInt($("#last_month_booking1").text()) + parseInt($("#last_month_booking2")
+            .text()) + parseInt($(
+                "#last_month_booking3")
+            .text()) + parseInt($("#last_month_booking4").text()) + parseInt($("#last_month_booking5").text()) +
+        parseInt($(
+            "#last_month_booking6").text()) +
+        parseInt($("#last_month_booking7").text()) + parseInt($("#last_month_booking8").text()) + parseInt($(
+            "#last_month_booking9").text()) +
+        parseInt($(
+            "#last_month_booking10").text()) + parseInt($("#last_month_booking11").text()) + parseInt($(
+            "#last_month_booking12").text()) +
+        parseInt($(
+            "#last_month_booking31").text()) + parseInt($("#last_month_booking30").text()) + parseInt($(
+            "#last_month_booking29").text()) +
+        parseInt($(
+            "#last_month_booking28").text()) + parseInt($("#last_month_booking27").text()) + parseInt($(
+            "#last_month_booking26").text()) +
+        parseInt($(
+            "#last_month_booking25").text()) + parseInt($("#last_month_booking24").text()) + parseInt($(
+            "#last_month_booking23").text()) +
+        parseInt($(
+            "#last_month_booking22").text()) + parseInt($("#last_month_booking21").text()) + parseInt($(
+            "#last_month_booking20").text()) +
+        parseInt($(
+            "#last_month_booking19").text()) + parseInt($("#last_month_booking18").text()) + parseInt($(
+            "#last_month_booking17").text()) +
+        parseInt($(
+            "#last_month_booking16").text()) + parseInt($("#last_month_booking15").text()) + parseInt($(
+            "#last_month_booking14").text()) +
+        parseInt($(
+            "#last_month_booking13").text())
+
+
+    $("#total_revenue_this_week").text(total_revenue)
+    $("#total_revenue_last_week").text(total_revenue_last_week)
+    $("#total_bookings_this_week").text(total_bookings)
+    $("#total_bookings_last_week").text(total_bookings_last_week)
+    $("#total_revenue_this_month").text(total_revenue_in_month)
+    $("#total_revenue_last_month").text(total_revenue_last_month)
+    $("#total_bookings_this_month").text(total_bookings_in_month)
+    $("#total_bookings_last_month").text(total_bookings_last_month)
+
+    $(".graph_of").click(() => {
+        $(".graph_of i").toggleClass("far fa-circle fas fa-circle-dot")
+    })
+
+    // CHART JS CONTROLS
+    google.charts.load('current', {
+        'packages': ['corechart']
+    });
+    google.charts.setOnLoadCallback(drawChartRev);
+    google.charts.setOnLoadCallback(drawChartVol);
+    google.charts.setOnLoadCallback(drawChartRevY);
+    google.charts.setOnLoadCallback(drawChartVolY);
+
+
+    function drawChartRev() {
+        var data = google.visualization.arrayToDataTable([
+            ['Past 7 days', 'WTD', 'LW'],
+            ['1', parseInt($("#day7").text()), parseInt($("#last_week_day7").text())],
+            ['2', parseInt($("#day6").text()), parseInt($("#last_week_day6").text())],
+            ['3', parseInt($("#day5").text()), parseInt($("#last_week_day5").text())],
+            ['4', parseInt($("#day4").text()), parseInt($("#last_week_day4").text())],
+            ['5', parseInt($("#day3").text()), parseInt($("#last_week_day3").text())],
+            ['6', parseInt($("#day2").text()), parseInt($("#last_week_day2").text())],
+            ['7', parseInt($("#day1").text()), parseInt($("#last_week_day1").text())]
+        ]);
+
+        var options = {
+            title: 'Revenue',
+            hAxis: {
+                title: 'Past 7 days',
+                titleTextStyle: {
+                    color: '#333'
+                }
+            },
+            vAxis: {
+                minValue: 0
+            },
+            height: 300
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('rev'));
+        chart.draw(data, options);
+    }
+
+    function drawChartVol() {
+        var data = google.visualization.arrayToDataTable([
+            ['Past 7 days', 'WTD', 'LW'],
+            ['1', parseInt($("#bookings_day7").text()), parseInt($("#last_week_bookings_day7").text())],
+            ['2', parseInt($("#bookings_day6").text()), parseInt($("#last_week_bookings_day6").text())],
+            ['3', parseInt($("#bookings_day5").text()), parseInt($("#last_week_bookings_day5").text())],
+            ['4', parseInt($("#bookings_day4").text()), parseInt($("#last_week_bookings_day4").text())],
+            ['5', parseInt($("#bookings_day3").text()), parseInt($("#last_week_bookings_day3").text())],
+            ['6', parseInt($("#bookings_day2").text()), parseInt($("#last_week_bookings_day2").text())],
+            ['7', parseInt($("#bookings_day1").text()), parseInt($("#last_week_bookings_day1").text())]
+        ]);
+
+        var options = {
+            title: 'Bookings',
+            hAxis: {
+                title: 'Past 7 days',
+                titleTextStyle: {
+                    color: '#333'
+                }
+            },
+            vAxis: {
+                minValue: 0
+            },
+            height: 300
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('vol'));
+        chart.draw(data, options);
+    }
+
+    function drawChartRevY() {
+        var data = google.visualization.arrayToDataTable([
+            ['Past 31 days', 'MTD', 'LM'],
+            ['1', parseInt($("#month31").text()), parseInt($("#last_month31").text())],
+            ['2', parseInt($("#month30").text()), parseInt($("#last_month30").text())],
+            ['3', parseInt($("#month29").text()), parseInt($("#last_month29").text())],
+            ['4', parseInt($("#month28").text()), parseInt($("#last_month28").text())],
+            ['5', parseInt($("#month27").text()), parseInt($("#last_month27").text())],
+            ['6', parseInt($("#month26").text()), parseInt($("#last_month26").text())],
+            ['7', parseInt($("#month25").text()), parseInt($("#last_month25").text())],
+            ['8', parseInt($("#month24").text()), parseInt($("#last_month24").text())],
+            ['9', parseInt($("#month23").text()), parseInt($("#last_month23").text())],
+            ['10', parseInt($("#month22").text()), parseInt($("#last_month22").text())],
+            ['11', parseInt($("#month21").text()), parseInt($("#last_month21").text())],
+            ['12', parseInt($("#month20").text()), parseInt($("#last_month20").text())],
+            ['13', parseInt($("#month19").text()), parseInt($("#last_month19").text())],
+            ['14', parseInt($("#month18").text()), parseInt($("#last_month18").text())],
+            ['15', parseInt($("#month17").text()), parseInt($("#last_month17").text())],
+            ['16', parseInt($("#month16").text()), parseInt($("#last_month16").text())],
+            ['17', parseInt($("#month15").text()), parseInt($("#last_month15").text())],
+            ['18', parseInt($("#month14").text()), parseInt($("#last_month14").text())],
+            ['19', parseInt($("#month13").text()), parseInt($("#last_month13").text())],
+            ['20', parseInt($("#month12").text()), parseInt($("#last_month12").text())],
+            ['21', parseInt($("#month11").text()), parseInt($("#last_month11").text())],
+            ['22', parseInt($("#month10").text()), parseInt($("#last_month10").text())],
+            ['23', parseInt($("#month9").text()), parseInt($("#last_month9").text())],
+            ['24', parseInt($("#month8").text()), parseInt($("#last_month8").text())],
+            ['25', parseInt($("#month7").text()), parseInt($("#last_month7").text())],
+            ['26', parseInt($("#month6").text()), parseInt($("#last_month6").text())],
+            ['27', parseInt($("#month5").text()), parseInt($("#last_month5").text())],
+            ['28', parseInt($("#month4").text()), parseInt($("#last_month4").text())],
+            ['29', parseInt($("#month3").text()), parseInt($("#last_month3").text())],
+            ['30', parseInt($("#month2").text()), parseInt($("#last_month2").text())],
+            ['31', parseInt($("#month1").text()), parseInt($("#last_month1").text())],
+        ]);
+
+        var options = {
+            title: 'Revenue',
+            hAxis: {
+                title: 'Past 31 days',
+                titleTextStyle: {
+                    color: '#333'
+                }
+            },
+            vAxis: {
+                minValue: 0
+            },
+            height: 300
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('rev_y'));
+        chart.draw(data, options);
+    }
+
+    function drawChartVolY() {
+        var data = google.visualization.arrayToDataTable([
+            ['Past 31 days', 'MTD', 'LM'],
+            ['1', parseInt($("#month_booking31").text()), parseInt($("#last_month_booking31").text())],
+            ['2', parseInt($("#month_booking30").text()), parseInt($("#last_month_booking30").text())],
+            ['3', parseInt($("#month_booking29").text()), parseInt($("#last_month_booking29").text())],
+            ['4', parseInt($("#month_booking28").text()), parseInt($("#last_month_booking28").text())],
+            ['5', parseInt($("#month_booking27").text()), parseInt($("#last_month_booking27").text())],
+            ['6', parseInt($("#month_booking26").text()), parseInt($("#last_month_booking26").text())],
+            ['7', parseInt($("#month_booking25").text()), parseInt($("#last_month_booking25").text())],
+            ['8', parseInt($("#month_booking24").text()), parseInt($("#last_month_booking24").text())],
+            ['9', parseInt($("#month_booking23").text()), parseInt($("#last_month_booking23").text())],
+            ['10', parseInt($("#month_booking22").text()), parseInt($("#last_month_booking22").text())],
+            ['11', parseInt($("#month_booking21").text()), parseInt($("#last_month_booking21").text())],
+            ['12', parseInt($("#month_booking20").text()), parseInt($("#last_month_booking20").text())],
+            ['13', parseInt($("#month_booking19").text()), parseInt($("#last_month_booking19").text())],
+            ['14', parseInt($("#month_booking18").text()), parseInt($("#last_month_booking18").text())],
+            ['15', parseInt($("#month_booking17").text()), parseInt($("#last_month_booking17").text())],
+            ['16', parseInt($("#month_booking16").text()), parseInt($("#last_month_booking16").text())],
+            ['17', parseInt($("#month_booking15").text()), parseInt($("#last_month_booking15").text())],
+            ['18', parseInt($("#month_booking14").text()), parseInt($("#last_month_booking14").text())],
+            ['19', parseInt($("#month_booking13").text()), parseInt($("#last_month_booking13").text())],
+            ['20', parseInt($("#month_booking12").text()), parseInt($("#last_month_booking12").text())],
+            ['21', parseInt($("#month_booking11").text()), parseInt($("#last_month_booking11").text())],
+            ['22', parseInt($("#month_booking10").text()), parseInt($("#last_month_booking10").text())],
+            ['23', parseInt($("#month_booking9").text()), parseInt($("#last_month_booking9").text())],
+            ['24', parseInt($("#month_booking8").text()), parseInt($("#last_month_booking8").text())],
+            ['25', parseInt($("#month_booking7").text()), parseInt($("#last_month_booking7").text())],
+            ['26', parseInt($("#month_booking6").text()), parseInt($("#last_month_booking6").text())],
+            ['27', parseInt($("#month_booking5").text()), parseInt($("#last_month_booking5").text())],
+            ['28', parseInt($("#month_booking4").text()), parseInt($("#last_month_booking4").text())],
+            ['29', parseInt($("#month_booking3").text()), parseInt($("#last_month_booking3").text())],
+            ['30', parseInt($("#month_booking2").text()), parseInt($("#last_month_booking2").text())],
+            ['31', parseInt($("#month_booking1").text()), parseInt($("#last_month_booking1").text())],
+        ]);
+
+        var options = {
+            title: 'Bookings',
+            hAxis: {
+                title: 'Past 31 days',
+                titleTextStyle: {
+                    color: '#333'
+                }
+            },
+            vAxis: {
+                minValue: 0
+            },
+            height: 300
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('vol_y'));
+        chart.draw(data, options);
+    }
+</script>
+{% endblock main %}

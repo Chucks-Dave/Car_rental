@@ -1,0 +1,71 @@
+{% load static %}
+<footer class="col-12 py-5 mt-5">
+    <div class="container col-12">
+        <h2 class="text-white text-center mb-4">FastCars</h2>
+        <div class="footer_row col-12">
+            <div class="text-white">
+                <h4 class="text-white px-3">Nav Links</h4>
+                <ul class="col-12">
+                    <li class="py-2"><a href="{% url 'home' %}" class="text-decoration-none text-white">Home</a></li>
+                    <li class="py-2"><a href="{% url 'cars' %}" class="text-decoration-none text-white">Cars</a></li>
+                    <li class="py-2"><a href="{% url 'faqs' %}" class="text-decoration-none text-white">FAQ</a></li>
+                    <li class="py-2"><a href="{% url 'contact' %}" class="text-decoration-none text-white">Contact</a></li>
+                </ul>
+            </div>
+            <div class="text-white">
+                <h4 class="text-white px-3">User Actions</h4>
+                <ul class="col-12">
+                    <li class="py-2"><a href="{% url 'edit_profile' %}" class="text-decoration-none text-white">Edit Profile</a>
+                    </li>
+                    <li class="py-2"><a href="{% url 'booking_history' %}" class="text-decoration-none text-white">Booking
+                            History</a></li>
+                    <li class="py-2"><a href="{% url 'logout' %}" class="text-decoration-none text-white">Logout</a></li>
+                </ul>
+            </div>
+            <div class="px-3 newsletter d-flex">
+                <div class="col-12">
+                    <h5 class="text-white mb-3 col-12">Register with us</h5>
+                    <a href="{% url 'register' %}" class="btn rounded-0 text-white"
+                        style="background: var(--orange);">CREATE AN ACCOUNT</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+    footer {
+        background-image: url('{% static "images/footer-bg.jpg" %}');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-blend-mode: darken;
+        background-color: rgba(0, 0, 0, .9);
+        min-height: 80vh;
+        display: grid;
+        grid-template-columns: 1fr;
+        place-content: center;
+        clip-path: polygon(50% 10%, 100% 0, 100% 100%, 0% 100%, 0 0%);
+    }
+
+    footer ul li {
+        z-index: 1;
+    }
+
+    .footer_row {
+        display: grid;
+        place-content: center;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    @media screen and (max-width: 992px) {
+        footer{
+            min-height: 100vh;
+        }
+        .footer_row {
+            grid-template-columns: 1fr 1fr;
+        }
+        .newsletter{
+            grid-column: 1/3;
+        }
+    }
+</style>

@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+<div class="col-12 d-flex flex-wrap">
+    <div class="col-12 col-lg">
+        {% include 'partials/sidenav.html' %}
+    </div>
+    <div class="main_content">
+        <div class="col-12 p-2">
+            <h4>Company Branches</h4>
+        </div>
+        <div class="col-12 px-2 d-flex my-3">
+            <input type="search" name="search_branch" id="search_branch" class="col form-control bg-transparent"
+                placeholder="Search branches">
+            <a href="#" class="btn d-flex align-items-center mx-2 add_btn" data-bs-toggle="modal"
+                data-bs-target="#addBranchModal"><i class="fas fa-plus"></i> <span class="d-none d-md-block">Add
+                    Branch</span></a>
+            <a href="#" class="btn d-flex align-items-center manage_btn" data-bs-toggle="modal"
+                data-bs-target="#manageBranchModal"><i class="fas fa-cogs"></i> <span class="d-none d-md-block">Manage
+                    Branches</span></a>
+        </div>
+        <div class="col-12 table_wrapper p-2">
+            <table class="col-12 table">
+                <tr>
+                    <th scope="col" class="long_content">Name</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Email</th>
+                    <th scope="col" class="long_content">Location</th>
+                    <th scope="col" class="long_content">Bookings <small>(this week)</small></th>
+                    <th scope="col" class="long_content">Revenue <small>(this week)</small></th>
+                </tr>
+
+                {% for branch in branches %}
+                <tr class="data_rows">
+                    <td><a href="#" class="text-decoration-none text-dark locations">{{branch.branch_location}}</a></td>
+                    <td><a href="#" class="text-decoration-none text-dark">{{branch.phone_number}}</a></td>
+                    <td><a href="#" class="text-decoration-none text-dark">{{branch.email}}</a></td>
+                    <td><a href="#" class="text-decoration-none text-dark">{{branch.address}}</a></td>
+                    <td><a href="#" class="text-decoration-none text-dark text-center">0</a></td>
+                    <td><a href="#" class="text-decoration-none text-dark text-center">$<span>0</span></a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- ============================================= ADD BRANCH ======================================================= -->
+<div class="modal fade" id="addBranchModal" tabindex="-1" aria-labelledby="addBranchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form class="modal-content" method="post" action="{% url 'add_branch' %}">
+            {% csrf_token %}
+            <div class="modal-body row g-2">
+                <div class="form-floating col-12">
+                    {{branchForm.branch_location}}
+                    <label for="id_brand_location">Brand Name:</label>
+                </div>
+                <div class="form-floating col-12 col-md">
+                    {{branchForm.phone_number}}
+                    <label for="id_phone_number">Phone Number:</label>
+                </div>
+                <div class="form-floating col-12 col-md">
+                    {{branchForm.email}}
+                    <label for="id_email">Email Address:</label>
+                </div>
+                <div class="form-floating col-12">
+                    {{branchForm.address}}
+                    <label for="id_address">Address:</label>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i>
+                    Cancel</button>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- ========================================== MANAGE BRANCH ======================================================= -->
+<div class="modal fade" id="manageBranchModal" tabindex="-1" aria-labelledby="manageBranchModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-body">
+                <input type="search" name="" id="search_brands" placeholder="Search brands" class="form-control col-12">
+                <ul class="list-group mt-3 col-12">
+                    {% for branch in branches %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>{{branch.branch_location}}</span>
+                        <div class="d-flex">
+                            <a href="{% url 'edit_branch' branch.slug %}"
+                                class="btn btn-sm btn-outline-primary me-2 edit_brand_btn">
+                                <i class="fas fa-pencil" style="pointer-events: none;"></i>
+                            </a>
+                            <a href="#" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                data-bs-target="#deleteBranchModal{{branch.id}}">
+                                <i class="fas fa-trash" style="pointer-events: none;"></i>
+                            </a>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% for branch in branches %}
+<!-- ========================================== DELETE BRANCH ======================================================= -->
+<div class="modal fade" id="deleteBranchModal{{branch.id}}" tabindex="-1"
+    aria-labelledby="deleteBrandsModal{{brand.id}}Label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-body">
+                Are you sure you want to delete "{{branch.branch_location}}"
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i>
+                    Cancel</button>
+                <a href="{% url 'delete_branch' branch.slug %}" class="btn btn-danger"><i class="fas fa-trash"></i>
+                    Yes</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+{% for booking_this_week in bookings_this_week %}
+<p class="booking_this_week d-none">{{booking_this_week}}</p>
+{% endfor %}
+{% for revenue_this_week in revenues_this_week %}
+<p class="revenue_this_week d-none">{{revenue_this_week}}</p>
+{% endfor %}
+
+<style>
+    #search_branch {
+        border-radius: 0;
+    }
+
+    .add_btn {
+        background: #83D7DD !important;
+        border-color: #83D7DD;
+        color: white !important;
+        border-radius: 0;
+    }
+
+    .manage_btn {
+        background: var(--orange) !important;
+        border-color: var(--orange);
+        color: white !important;
+        border-radius: 0;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+
+    table tr:first-child {
+        background: #eee;
+    }
+
+    table th {
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+
+    .table_wrapper {
+        overflow-x: scroll;
+    }
+
+    .table_wrapper::-webkit-scrollbar {
+        height: 0;
+    }
+
+    .table_wrapper::-webkit-scrollbar-thumb {
+        background: #777;
+    }
+
+    .table_wrapper:hover::-webkit-scrollbar {
+        height: 5px;
+    }
+
+    @media screen and (max-width: 992px) {
+        .table_wrapper td {
+            text-align: center;
+        }
+
+        .long_content {
+            min-width: 150px;
+        }
+    }
+</style>
+
+
+<script>
+    $(document).ready(function () {
+        $("#search_branch").keyup((e) => {
+            var locations = $(".locations")
+            for (let i = 0; i < locations.length; i++) {
+                if (locations[i].textContent.toLowerCase().includes(e.target.value.toLowerCase())) {
+                    $(locations[i].parentElement.parentElement).removeClass('d-none')
+                } else {
+                    $(locations[i].parentElement.parentElement).addClass('d-none')
+                }
+            }
+        })
+
+        var bookings_list = $(".booking_this_week")
+        for (let i = 0; i < $(".data_rows").length; i++) {
+            $(`tr.data_rows:nth-child(${i + 2}) td:nth-child(5) a`).text($(bookings_list[i]).text())
+        }
+
+        var revenues_list = $(".revenue_this_week")
+        for (let i = 0; i < $(".data_rows").length; i++) {
+            $(`tr.data_rows:nth-child(${i + 2}) td:nth-child(6) a span`).text($(revenues_list[i]).text())
+        }
+    })
+</script>
+{% endblock main %}

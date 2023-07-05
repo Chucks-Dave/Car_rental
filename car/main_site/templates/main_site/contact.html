@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+
+{% include 'partials/navbar.html' %}
+
+<!-- ======================================================= HERO BANNER =========================================================== -->
+<section class="hero-banner d-flex align-items-center justify-content-start mb-5">
+    <div class="container">
+        <h2 class="text-white">Contact Us</h2>
+        <div class="d-flex text-white align-items-center">
+            <a href="{% url 'home' %}">Home</a>
+            <small><small class="fas fa-chevron-right mx-1"></small></small>
+            <a href="{% url 'contact' %}">Contact Us</a>
+        </div>
+    </div>
+</section>
+
+<!-- ===================================================== Contact Details ========================================================= -->
+<section class="col-12 container py-5">
+    <legend class="mb-3 fs-5">Reach out to any of our branches closest to you.</legend>
+    <div class="table_holder">
+        <table class="table table-striped">
+            <tr>
+                <th>SN</th>
+                <th>Branch</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Address</th>
+            </tr>
+    
+            {% for branch in branches %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td style="min-width: 150px;">{{branch.branch_location}}</td>
+                <td><a href="tel:{{branch.phone_number}}" class="text-decoration-none">{{branch.phone_number}}</a></td>
+                <td><a href="mailto:{{branch.email}}" class="text-decoration-none">{{branch.email}}</a></td>
+                <td style="min-width: 200px;">{{branch.address}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</section>
+
+<!-- ======================================================= QUERY FORM ============================================================ -->
+<section class="col-12 py-5 bg-light">
+    <div class="container">
+        <legend class="mb-3 fs-5">Send Us A Message or ask a question</legend>
+        <form action="{% url 'add_query' %}" method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-12 col-md-6">
+                    {{customerQueryForm.firstname}}
+                </div>
+                <div class="col-12 col-md-6">
+                    {{customerQueryForm.lastname}}
+                </div>
+                <div class="col-12">
+                    {{customerQueryForm.email}}
+                </div>
+                <div class="col-12">
+                    {{customerQueryForm.message}}
+                </div>
+                <div class="col-12 text-center">
+                    <button type="submit" class="btn px-4 rounded-0 text-white"
+                        style="background: var(--orange);">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- ====================================================== REVIEW FORM ============================================================ -->
+<section class="col-12 container py-5">
+    <span class="mb-3 fs-6 text-uppercase">Have You visited any of our branches before?</span>
+    <legend class="my-3">Leave your review</legend>
+    <form action="{% url 'add_customer_review' %}" method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-12">
+                {{customerReviewForm.review}}
+            </div>
+            <div class="col-12 text-center">
+                <button type="submit" class="btn px-4 rounded-0 text-white"
+                    style="background: var(--orange);">Submit</button>
+            </div>
+        </div>
+    </form>
+</section>
+
+{% include 'partials/footer.html' %}
+
+
+<style>
+    .hero-banner {
+        max-width: 100vw;
+        height: 50vh;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-blend-mode: darken;
+        background-color: rgba(0, 0, 0, .5);
+        background-image: url('{% static "images/form_side_image.jpg" %}');
+        clip-path: polygon(0% 0%, 100% 0, 100% 90%, 50% 100%, 0% 90%);
+    }
+
+    .hero-banner a {
+        text-decoration: none;
+        color: #f5f5f5;
+        transition: .1s;
+    }
+
+    .hero-banner a:hover {
+        color: var(--orange);
+    }
+
+    .table_holder{
+        overflow-x: scroll;
+    }
+
+    legend {
+        text-transform: capitalize;
+    }
+</style>
+{% endblock main %}

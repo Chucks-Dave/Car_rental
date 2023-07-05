@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+
+{% include "partials/navbar.html" %}
+
+<!-- ======================================================= HERO BANNER =========================================================== -->
+<section class="hero-banner d-flex align-items-center justify-content-start mb-5">
+    <div class="container">
+        <h2 class="text-white">Booking History</h2>
+        <div class="d-flex text-white align-items-center">
+            <a href="{% url 'home' %}">Home</a>
+            <small><small class="fas fa-chevron-right mx-1"></small></small>
+            <a href="{% url 'booking_history' %}">Booking History</a>
+        </div>
+    </div>
+</section>
+
+<section class="col-11 col-md-12 mx-auto container py-5">
+    {% for booking in bookings %}
+    <div class="col-12 booking">
+        <div class="d-flex align-items-center py-3">
+            <hr class="col bg-dark" style="height: 2px;">
+            <h6 class="scheduled_date text-center px-2">{{booking.pick_up_date}}</h6>
+            <hr class="col bg-dark" style="height: 2px;">
+        </div>
+        <div class="card col-12 p-3 bg-light border-0 shadow-sm">
+            <div class="d-flex align-items-center">
+                <img src="{{booking.vehicle.image1.url}}" width="50px" height="50px" alt="" style="border-radius: 50%;">
+                <h5 class="ms-2">{{booking.vehicle.brand.brand_name}} {{booking.vehicle.vehicle_model}}</h5>
+                {% if booking.completed %}
+                <div class="px-2 ms-auto" style="background: #00ff155d; border-radius: 10px;"><small
+                        class="text-success">Completed</small></div>
+                {% else %}
+                {% if booking.confirmed %}
+                <div class="px-2 ms-auto" style="background: #ffbb005d; border-radius: 10px;"><small
+                        class="text-warning">Active</small></div>
+                {% else %}
+                <div class="px-2 ms-auto" style="background: #8686865d; border-radius: 10px;"><small
+                        class="text-secondary">Inactive</small></div>
+                {% endif %}
+                {% endif %}
+            </div>
+            <div class="d-flex flex-wrap">
+                <div class="col-12 col-md-6 py-3">
+                    <ul class="list-group">
+                        <li class="list-group-item bg-light border-0 d-flex flex-wrap"><span>Pick-Up Date :</span> <span
+                                class="ms-auto text-end">{{booking.pick_up_date}}</span></li>
+                        <li class="list-group-item bg-light border-0 d-flex flex-wrap"><span>Drop-Off Date :</span> <span
+                                class="ms-auto text-end">{{booking.drop_off_date}}</span></li>
+                        <li class="list-group-item bg-light border-0 d-flex flex-wrap">
+                            <span>Pick-Up Location :</span>
+                            <span class="ms-auto text-end">
+                                {% if booking.pick_up_location %}
+                                {{booking.pick_up_location}}
+                                {% else %}
+                                ...
+                                {% endif %}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-12 col-md-6 py-3 text-end">
+                    <p>Price(per day): $<span class="fs-3">{{booking.vehicle.price}}</span></p>
+                    {% if booking.confirmed and not booking.completed %}
+                    <a href="{% url 'cancel_booking' booking.id %}" class="px-2 text-decoration-none"
+                        style="background: #ff00005d; border-radius: 10px;"><small class="text-danger">Cancel
+                            Booking</small></a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</section>
+
+{% include "partials/footer.html" %}
+
+
+<style>
+    .hero-banner {
+        max-width: 100vw;
+        height: 50vh;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-blend-mode: darken;
+        background-color: rgba(0, 0, 0, .5);
+        background-image: url('{% static "images/form_side_image.jpg" %}');
+        clip-path: polygon(0% 0%, 100% 0, 100% 90%, 50% 100%, 0% 90%);
+    }
+
+    .hero-banner a {
+        text-decoration: none;
+        color: #f5f5f5;
+        transition: .1s;
+    }
+
+    .hero-banner a:hover {
+        color: var(--orange);
+    }
+</style>
+{% endblock main %}

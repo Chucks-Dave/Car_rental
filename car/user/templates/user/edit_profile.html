@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+<div class="container mx-auto"
+    style="display: grid; place-content: center; grid-template-columns: 1fr; min-height: 100vh;">
+    <div class="d-block d-md-flex align-items-center col-12">
+
+        <div class="col-12 col-md-5 col-lg-4 me-0 me-md-3">
+            <div class="card border-0 shadow p-4 user_card">
+                <a href="{% url 'home' %}" class="text-decoration-none text-dark"><i class="fas fa-arrow-left"></i> back</a>
+                {% if user.profile_image %}
+                <img src="{{user.profile_image.url}}" width="200px" height="200px" class="profile_img mx-auto" alt="">
+                {% else %}
+                <img src="{% static 'images/user_icon.png' %}" width="200px" height="200px" class="profile_img mx-auto"
+                    alt="">
+                {% endif %}
+                <h4 class="text-center my-2">{{user.username}}</h4>
+                <span class="text-center">{{user.email}}</span>
+                <span class="text-center">{{user.phone_number}}</span>
+            </div>
+        </div>
+
+        <div class="col-12 col-md mt-3 mt-md-0">
+            <div class="card border-0 shadow p-4 action_card">
+                <form action="" method="post" class="text-start" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h5 class="text-start">Edit your account</h5>
+                    <div class="row m-0 g-0 gy-3 g-md-3">
+                        <div class="col-12">
+                            <label for="id_profile_image">Change Profile Image</label>
+                            {{profile_form.profile_image}}
+                        </div>
+                        <div class="d-flex align-items-center col-12">
+                            <label for="id_username">Username :</label>
+                            {{profile_form.username}}
+                        </div>
+                        <div class="d-flex align-items-center col-12 col-lg-6">
+                            <label for="id_email">Email :</label>
+                            {{profile_form.email}}
+                        </div>
+                        <div class="d-flex align-items-center col-12 col-lg-6">
+                            <label for="id_phone_number">Phone Number :</label>
+                            {{profile_form.phone_number}}
+                        </div>
+                    </div>
+                    <button type="submit" class="btn rounded-0 text-white mt-4 col-6"
+                        style="background: var(--orange);">Save</button>
+                </form>
+
+                <h6 class="mt-4 mb-2 px-0 px-md-3">More Actions :</h6>
+                <div class="d-block d-lg-flex col-12 px-0 px-md-3">
+                    <a href="{% url 'change_password' %}"
+                        class="col-12 col-lg me-0 me-md-2 mt-2 mt-md-0 btn text-start text-lg-center rounded-o border-0 shadow-sm bg-white"><i
+                            class="fas fa-lock"></i> Change Password</a>
+                    <a href="{% url 'logout' %}"
+                        class="col-12 col-lg mt-2 mt-md-0 btn text-start text-lg-center rounded-o border-0 shadow-sm bg-white"><i
+                            class="fas fa-right-from-bracket"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .card {
+        min-height: 50vh;
+        display: grid;
+        place-content: center;
+        grid-template-columns: 1fr;
+    }
+
+    input[type="text"].form-control,
+    input[type="email"].form-control {
+        border: 1px solid transparent;
+        border-bottom: 1px solid #555;
+    }
+</style>
+
+<script>
+    $(".profile_img").css("border-radius", "50%")
+</script>
+{% endblock main %}

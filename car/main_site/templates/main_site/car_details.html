@@ -1,0 +1,398 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+{% include "partials/navbar.html" %}
+<div class="col-12">
+    <!-- ======================================================= BANNER ======================================================== -->
+    <div class="hero-banner d-flex align-items-center justify-content-start"
+        style="background-image: url({{vehicle.image1.url}});">
+        <div class="container">
+            <h2 class="text-white">{{vehicle.brand.brand_name}} {{vehicle.vehicle_model}}</h2>
+            <div class="d-flex text-white align-items-center">
+                <a href="{% url 'home' %}">Home</a>
+                <small><small class="fas fa-chevron-right mx-1"></small></small>
+                <a href="{% url 'cars' %}">Cars</a>
+                <small><small class="fas fa-chevron-right mx-1"></small></small>
+                <a href="{% url 'cars_by_brand' vehicle.brand.slug %}">{{vehicle.brand.brand_name}}</a>
+                <small><small class="fas fa-chevron-right mx-1"></small></small>
+                <a href="#">{{vehicle.vehicle_model}}</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================== SPECIFICATIONS AND REVIEWS ============================================= -->
+    <div class="container col-12 mx-auto">
+        <div class="row g-4">
+            <div class="col-12 col-md-7 col-lg-8 py-5">
+                <div class="col-12 py-5">
+                    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active text-center">
+                                <div class="d-flex align-items-center justify-content-center carousel_image_holder">
+                                    <img src="{{vehicle.image1.url}}" alt="" class="img-fluid">
+                                </div>
+                            </div>
+                            {% if vehicle.image2 %}
+                            <div class="carousel-item text-center">
+                                <div class="d-flex align-items-center justify-content-center carousel_image_holder">
+                                    <img src="{{vehicle.image2.url}}" alt="" class="img-fluid">
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if vehicle.image3 %}
+                            <div class="carousel-item text-center">
+                                <div class="d-flex align-items-center justify-content-center carousel_image_holder">
+                                    <img src="{{vehicle.image3.url}}" alt="" class="img-fluid">
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if vehicle.image4 %}
+                            <div class="carousel-item text-center">
+                                <div class="d-flex align-items-center justify-content-center carousel_image_holder">
+                                    <img src="{{vehicle.image4.url}}" alt="" class="img-fluid">
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if vehicle.image5 %}
+                            <div class="carousel-item text-center">
+                                <div class="d-flex align-items-center justify-content-center carousel_image_holder">
+                                    <img src="{{vehicle.image5.url}}" alt="" class="img-fluid">
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- ================================== CAROUSEL CONTROLS ============================================= -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+                            data-bs-slide="prev">
+                            <span style="background: rgba(0, 0, 0, 0.5); border-radius: 50%; width: 40px; height: 40px;"
+                                class="d-flex justify-content-center align-items-center">
+                                <span class="fa fa-angle-left fs-4" aria-hidden="true"></span>
+                            </span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                            data-bs-slide="next">
+                            <span style="background: rgba(0, 0, 0, 0.5); border-radius: 50%; width: 40px; height: 40px;"
+                                class="d-flex justify-content-center align-items-center">
+                                <span class="fa fa-angle-right fs-4" aria-hidden="true"></span>
+                            </span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+
+                        <!-- ============================ CAROUSEL INDICATORS WITH IMAGES ===================================== -->
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="0"
+                                class="active" aria-current="true" aria-label="Slide 1"
+                                style="background-image: url('{{vehicle.image1.url}}');"></button>
+
+                            {% if vehicle.image2 %}
+                            <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="1"
+                                aria-label="Slide 2" style="background-image: url('{{vehicle.image2.url}}');"></button>
+                            {% endif %}
+
+                            {% if vehicle.image3 %}
+                            <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="2"
+                                aria-label="Slide 3" style="background-image: url('{{vehicle.image3.url}}');"></button>
+                            {% endif %}
+
+                            {% if vehicle.image4 %}
+                            <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="3"
+                                aria-label="Slide 4" style="background-image: url('{{vehicle.image4.url}}');"></button>
+                            {% endif %}
+
+                            {% if vehicle.image5 %}
+                            <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="4"
+                                aria-label="Slide 5" style="background-image: url('{{vehicle.image5.url}}');"></button>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 specs_and_reviews">
+                    <div class="p-0 m-0 mb-5 d-flex details_nav">
+                        <a href="#specs" class="px-4 py-3 text-dark text-decoration-none active">Specifications</a>
+
+                        {% if request.user.is_authenticated %}
+                        <a href="#reviews" class="px-4 py-3 text-dark text-decoration-none">Reviews</a>
+                        {% else %}
+                        <a href="{% url 'register' %}" class="px-4 py-3 text-dark text-decoration-none">Reviews</a>
+                        {% endif %}
+
+                    </div>
+                    <div class="d-flex" style="overflow-x: hidden;">
+                        <!-- ======================================= VEHICLE SPECS ============================================ -->
+                        <div class="col-12" id="specs">
+                            <ul class="p-1 p-md-3 list-group">
+                                <li class="list-group-item rounded-0 d-flex"><span class="col-6 fw-bold">Brand
+                                        :</span><span class="col-6 text-muted">{{vehicle.brand.brand_name}}</span></li>
+                                <li class="list-group-item rounded-0 d-flex"><span class="col-6 fw-bold">Model
+                                        :</span><span class="col-6 text-muted">{{vehicle.vehicle_model}}</span></li>
+                                <li class="list-group-item rounded-0 d-flex"><span class="col-6 fw-bold">Available in
+                                        :</span><span class="col-6 text-muted">{{vehicle.branch.branch_location}}</span>
+                                </li>
+                                <li class="list-group-item rounded-0 d-flex"><span class="col-6 fw-bold">Stock
+                                        :</span><span class="col-6 text-muted">{{vehicle.stock}}</span></li>
+                                <li class="list-group-item rounded-0 d-flex"><span class="col-6 fw-bold">Year
+                                        :</span><span class="col-6 text-muted">{{vehicle.year}}</span></li>
+                                <li class="list-group-item rounded-0 d-flex"><span class="col-6 fw-bold">Mileage
+                                        :</span><span class="col-6 text-muted">{{vehicle.mileage}}</span></li>
+                                <li class="list-group-item rounded-0 d-flex"><span class="col-6 fw-bold">VIN
+                                        :</span><span class="col-6 text-muted">{{vehicle.vin}}</span></li>
+                                <li class="list-group-item rounded-0 d-flex"><span class="col-6 fw-bold">Horsepower
+                                        :</span><span class="col-6 text-muted">{{vehicle.horsepower}}</span></li>
+                                <li class="list-group-item rounded-0 d-flex"><span class="col-6 fw-bold">Transmission
+                                        :</span><span class="col-6 text-muted">{{vehicle.transmission}}</span></li>
+                                <li class="list-group-item rounded-0 d-flex"><span class="col-6 fw-bold">Door
+                                        :</span><span class="col-6 text-muted">{{vehicle.door}}</span></li>
+                                <li class="list-group-item rounded-0 d-flex"><span class="col-6 fw-bold">Drive
+                                        :</span><span class="col-6 text-muted">{{vehicle.drive}}</span></li>
+                                <li class="list-group-item rounded-0 d-flex"><span class="col-6 fw-bold">Seat
+                                        :</span><span class="col-6 text-muted">{{vehicle.seat}}</span></li>
+                                <li class="list-group-item rounded-0 d-flex"><span class="col-6 fw-bold">Color
+                                        :</span><span class="col-6 text-muted">{{vehicle.color}}</span></li>
+                                <li class="list-group-item rounded-0 d-flex"><span class="col-6 fw-bold">Price (per day)
+                                        :</span><span class="col-6 text-muted">${{vehicle.price}}</span></li>
+                            </ul>
+                        </div>
+
+                        <!-- ========================================= REVIEWS ================================================ -->
+                        <div class="col-12" id="reviews">
+                            <div class="comment_holder">
+                                {% for comment in vehicle.comments.all %}
+
+                                {% if comment.should_show %}
+                                <div class="card col-11 mx-auto p-1 bg-transparent border-0">
+                                    <div class="row g-0 p-3">
+                                        <div style="width: fit-content !important;">
+                                            {% if comment.user.profile_image %}
+                                            <img src="{{comment.user.profile_image.url}}" class="img-fluid"
+                                                style="width: 50px !important; height: 50px !important; border-radius: 50%;"
+                                                alt="...">
+                                            {% else %}
+                                            <img src="{% static 'images/user_icon.png' %}" class="img-fluid"
+                                                style="width: 50px !important; height: 50px !important; border-radius: 50%;"
+                                                alt="...">
+                                            {% endif %}
+                                        </div>
+                                        <div class="col">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between">
+                                                    <h5 class="card-title">{{comment.user.username}}</h5>
+                                                </div>
+
+                                                <div class="d-flex text-warning mb-3 ratings_holder">
+                                                    <div class="rating d-none">{{comment.rating}}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="card-text text-muted">{{comment.comment}}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                {% endfor %}
+                            </div>
+                            <form action="" method="post" class="col-10 mx-auto py-5">
+                                <h4>Add a comment</h4>
+                                {% csrf_token %}
+                                <label for="one" class="fas fa-star text-warning fs-4 my-4"></label>
+                                <label for="two" class="far fa-star text-warning fs-4 my-4"></label>
+                                <label for="three" class="far fa-star text-warning fs-4 my-4"></label>
+                                <label for="four" class="far fa-star text-warning fs-4 my-4"></label>
+                                <label for="five" class="far fa-star text-warning fs-4 my-4"></label>
+                                <input type="radio" name="rating" id="one" class="d-none" value="1" checked>
+                                <input type="radio" name="rating" id="two" class="d-none" value="2">
+                                <input type="radio" name="rating" id="three" class="d-none" value="3">
+                                <input type="radio" name="rating" id="four" class="d-none" value="4">
+                                <input type="radio" name="rating" id="five" class="d-none" value="5">
+                                {{vehicle_comment_form}}
+                                <button type="submit" class="btn px-4 rounded-0 mt-4 text-white"
+                                    style="background: var(--orange);">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-5 col-lg-4 py-5">
+                <div class="col-12 py-5">
+                    <div class="col-12 bg-dark py-2 text-white text-center">
+                        <span class="fs-4">${{vehicle.price}} per day</span>
+                    </div>
+                    <div class="col-12 booking-form-holder p-4">
+                        <form action="{% url 'book_car' vehicle.slug %}" method="post" class="col-12">
+                            {% csrf_token %}
+                            {{booking_form}}
+                            {% if can_be_booked %}
+                            <button type="submit" class="col-12 btn py-2 rounded-0 text-white"
+                                style="background: var(--orange);">BOOK THIS CAR</button>
+                            {% else %}
+                            <button type="button"
+                                onclick="alert('Sorry. All {{vehicle.brand}} {{vehicle.vehicle_model}} we have in stock are booked.')"
+                                class="col-12 btn py-2 rounded-0 bg-light text-secondary">OUT OF STOCK</button>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'partials/footer.html' %}
+
+
+<style>
+    .hero-banner {
+        max-width: 100vw;
+        height: 50vh;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-blend-mode: darken;
+        background-color: rgba(0, 0, 0, .5);
+        clip-path: polygon(0 0, 100% 0, 100% 90%, 50% 100%, 0 90%);
+    }
+
+    .hero-banner a {
+        text-decoration: none;
+        color: #f5f5f5;
+        transition: .1s;
+    }
+
+    .hero-banner a:hover {
+        color: var(--orange);
+    }
+
+    .carousel-indicators {
+        position: static !important;
+        overflow-x: scroll !important;
+        width: 100%;
+        margin-left: 0 !important;
+    }
+
+    .carousel-indicators button {
+        width: 50px !important;
+        height: 50px !important;
+        background-color: transparent !important;
+        background-size: cover !important;
+        background-repeat: no-repeat !important;
+    }
+
+    .specs_and_reviews .details_nav {
+        background: #eee;
+    }
+
+    .specs_and_reviews .details_nav a.active {
+        border-bottom: 2px solid var(--orange);
+        color: var(--orange) !important;
+    }
+
+    .specs_and_reviews #specs,
+    .specs_and_reviews #reviews {
+        height: fit-content !important;
+    }
+
+    .specs_and_reviews #specs ul {
+        border: 1px solid #ddd;
+        border-radius: 0 !important;
+    }
+
+    .specs_and_reviews #specs ul li {
+        background: transparent !important;
+        border-color: transparent;
+        border-bottom: 1px dotted #ccc;
+    }
+
+    .specs_and_reviews #specs ul li span.fw-bold {
+        text-transform: uppercase;
+        font-weight: 600 !important;
+    }
+
+    .comment_holder {
+        max-height: 100vh;
+        overflow-y: scroll;
+    }
+
+    .booking-form-holder {
+        background: #f1f1f1;
+    }
+
+    .booking-form-holder label {
+        margin-bottom: 15px;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 14px;
+    }
+
+    .booking-form-holder .form-control {
+        margin-bottom: 30px;
+        font-size: 14px !important;
+    }
+</style>
+
+<script>
+    $(".specs_and_reviews .details_nav a").click(() => {
+        $(".specs_and_reviews .details_nav a").toggleClass("active")
+    })
+
+    var indicators = $(".carousel-indicators button")
+    for (let i = 0; i < indicators.length; i++) {
+        $(indicators[i]).attr("data-bs-slide-to", i)
+    }
+
+    var ratings = $(".rating")
+
+    for (let i = 0; i < ratings.length; i++) {
+        var rating = parseInt($(ratings[i]).text())
+        for (let a = 0; a < rating; a++) {
+            var icon_solid = document.createElement("i")
+            $(icon_solid).addClass("fas fa-star")
+            $(ratings[i].parentElement).append(icon_solid)
+        }
+        for (let b = 0; b < 5 - rating; b++) {
+            var icon_regular = document.createElement("i")
+            $(icon_regular).addClass("far fa-star")
+            $(ratings[i].parentElement).append(icon_regular)
+        }
+    }
+    $("#one").click(function () {
+        $("label[for='one']").addClass('fas').removeClass('far')
+        $("label[for='two']").addClass('far').removeClass('fas')
+        $("label[for='three']").addClass('far').removeClass('fas')
+        $("label[for='four']").addClass('far').removeClass('fas')
+        $("label[for='five']").addClass('far').removeClass('fas')
+    })
+    $("#two").click(function () {
+        $("label[for='one']").addClass('fas').removeClass('far')
+        $("label[for='two']").addClass('fas').removeClass('far')
+        $("label[for='three']").addClass('far').removeClass('fas')
+        $("label[for='four']").addClass('far').removeClass('fas')
+        $("label[for='five']").addClass('far').removeClass('fas')
+    })
+    $("#three").click(function () {
+        $("label[for='one']").addClass('fas').removeClass('far')
+        $("label[for='two']").addClass('fas').removeClass('far')
+        $("label[for='three']").addClass('fas').removeClass('far')
+        $("label[for='four']").addClass('far').removeClass('fas')
+        $("label[for='five']").addClass('far').removeClass('fas')
+    })
+    $("#four").click(function () {
+        $("label[for='one']").addClass('fas').removeClass('far')
+        $("label[for='two']").addClass('fas').removeClass('far')
+        $("label[for='three']").addClass('fas').removeClass('far')
+        $("label[for='four']").addClass('fas').removeClass('far')
+        $("label[for='five']").addClass('far').removeClass('fas')
+    })
+    $("#five").click(function () {
+        $("label[for='one']").addClass('fas').removeClass('far')
+        $("label[for='two']").addClass('fas').removeClass('far')
+        $("label[for='three']").addClass('fas').removeClass('far')
+        $("label[for='four']").addClass('fas').removeClass('far')
+        $("label[for='five']").addClass('fas').removeClass('far')
+    })
+</script>
+{% endblock main %}

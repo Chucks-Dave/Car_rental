@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+
+<div class="d-flex justify-content-center align-items-center col-12 center">
+    <div class="col-12 col-md-10 col-lg-7 d-flex flex-wrap">
+        <div class="form_left col-12 col-md-5 col-lg-4 d-flex justify-content-center align-items-center">
+            <img src="" alt="" class="img-fluid col-6">
+        </div>
+        <div class="col-12 col-md-7 col-lg-8 p-3 p-md-4 pb-3 bg-light">
+            <form action="" method="post">
+                {% csrf_token %}
+                <h3 class="text-start mb-3">Register</h3>
+                <div class="row m-0 p-0 gx-2">
+                    <div class="form-floating col-12 mb-3">
+                        <input type="text" class="col-12 form-control" name="username" id="username" required>
+                        <label for="username">Username</label>
+                    </div>
+                    <div class="form-floating col-12 mb-3">
+                        <input type="email" class="col-12 form-control" name="email" id="email" required>
+                        <label for="email">Email Address</label>
+                    </div>
+                    <div class="form-floating col-12 col-md-6 mb-3">
+                        <input type="password" class="col-12 form-control" name="password1" id="password1" required>
+                        <label for="password1">Set Password</label>
+                    </div>
+                    <div class="form-floating col-12 col-md-6 mb-3">
+                        <input type="password" class="col-12 form-control" name="password2" id="password2" required>
+                        <label for="password2">Confirm Password</label>
+                    </div>
+                    <div class="col-12 text-center">
+                        <button type="submit" class="btn px-4 mb-3">Submit</button>
+                        <p>Already have an account? <a href="{% url 'login' %}" class="text-decoration-none">Login</a></p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+    .center {
+        height: 100vh;
+    }
+
+    input {
+        background: none !important;
+        box-shadow: none !important;
+        border: 1px solid transparent !important;
+        border-bottom: 1px solid #222 !important;
+        border-radius: 0 !important;
+    }
+
+    button {
+        background: var(--orange) !important;
+        color: white !important;
+        border-radius: 0 !important;
+    }
+
+    .form_left {
+        background-image: url('{% static "images/form_side_image.jpg" %}');
+        min-height: 30vh;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-blend-mode: darken;
+        background-color: rgba(0, 0, 0, 0.7);
+        background-position: left;
+    }
+</style>
+
+{% endblock main %}

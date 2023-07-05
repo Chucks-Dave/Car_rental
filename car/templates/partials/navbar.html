@@ -1,0 +1,146 @@
+{% load static %}
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-md fixed-top py-2">
+    <div class="container">
+        <a class="navbar-brand text-white fs-3" href="{% url 'home' %}">FastCars</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="fas fa-bars text-light"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- NAV LINKS -->
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item px-2">
+                    <a class="nav-link text-white active" aria-current="page" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="nav-item px-2">
+                    <a class="nav-link text-white" href="{% url 'cars' %}">Our fleet</a>
+                </li>
+                <li class="nav-item px-2">
+                    <a class="nav-link text-white" href="{% url 'faqs' %}">FAQ</a>
+                </li>
+                <li class="nav-item px-2">
+                    <a class="nav-link text-white" href="{% url 'contact' %}">Contact</a>
+                </li>
+            </ul>
+
+
+            <!-- IF USER IS NOT LOGGED IN, SHOW LOGIN AND SIGNUP BUTTON. ELSE, SHOW THEIR ACTIVITY NAVIGATION DROPDOWN. -->
+            {% if not request.user.is_authenticated %}
+            <div class="d-flex">
+                <a href="{% url 'login' %}" class="btn btn-outline-light rounded-0 px-4">Login</a>
+                <a href="{% url 'register' %}" class="btn btn-light rounded-0">Sign Up</a>
+            </div>
+            {% else %}
+            <div class="d-none d-md-flex align-items-center text-light pt-2">
+                <span class="me-2">Welcome back <b>{{request.user.username}}</b></span>
+
+                <div class="dropdown user_activities">
+                    <button class="btn dropdown-toggle border-0 text-light" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        {% if request.user.profile_image %}
+                        <img src="{{request.user.profile_image.url}}" width="30px" height="30px"
+                            style="border-radius: 50%;" alt="">
+                        {% else %}
+                        <img src="{% static 'images/user_icon.png' %}" width="30px" height="30px" class="bg-white"
+                            style="border-radius: 50%;" alt="">
+                        {% endif %}
+                    </button>
+                    <ul class="dropdown-menu bg-transparent border-0">
+                        <li class="py-2"><a class="dropdown-item ms-auto btn text-dark shadow-sm"
+                                href="{% url 'edit_profile' %}"><i class="fa-solid fa-user-pen"></i></a></li>
+                        <li class="py-2"><a class="dropdown-item ms-auto btn text-dark shadow-sm"
+                                href="{% url 'booking_history' %}"><i class="fa-solid fa-clock-rotate-left"></i></a>
+                        </li>
+                        {% if request.user.is_staff %}
+                        <li class="py-2"><a class="dropdown-item ms-auto btn text-dark shadow-sm"
+                                href="{% url 'dashboard' %}"><i class="fa-solid fa-chart-line"></i></a></li>
+                        {% endif %}
+                        <li class="py-2"><a class="dropdown-item ms-auto btn text-dark shadow-sm"
+                                href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</nav>
+
+<!-- LOGGED IN USER ACTIVITY NAV FOR SMALL SCREEN SIZE. -->
+{% if request.user.is_authenticated %}
+<div class="d-block d-md-none user_activities_wrapper">
+
+    <div class="dropdown user_activities">
+        <button class="btn border-0 text-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa-solid fa-bars-staggered"></i>
+        </button>
+        <ul class="dropdown-menu bg-transparent border-0">
+            <li class="py-2"><a class="dropdown-item ms-auto btn text-dark shadow-sm" href="{% url 'edit_profile' %}"><i
+                        class="fa-solid fa-user-pen"></i></a></li>
+            <li class="py-2"><a class="dropdown-item ms-auto btn text-dark shadow-sm"
+                    href="{% url 'booking_history' %}"><i class="fa-solid fa-clock-rotate-left"></i></a></li>
+            {% if request.user.is_staff %}
+            <li class="py-2"><a class="dropdown-item ms-auto btn text-dark shadow-sm" href="{% url 'dashboard' %}"><i
+                        class="fa-solid fa-chart-line"></i></a></li>
+            {% endif %}
+            <li class="py-2"><a class="dropdown-item ms-auto btn text-dark shadow-sm" href="{% url 'logout' %}"><i
+                        class="fa-solid fa-right-from-bracket"></i></a></li>
+        </ul>
+    </div>
+</div>
+{% endif %}
+
+<style>
+    nav {
+        background: transparent;
+        transition: .1s;
+    }
+
+    .user_activities .dropdown-item {
+        width: fit-content !important;
+        height: 40px !important;
+        display: grid;
+        place-content: center;
+        border-radius: 50px !important;
+        background: white;
+    }
+
+    .user_activities .dropdown-item:hover {
+        color: white !important;
+        background: rgb(0, 0, 44);
+    }
+
+    .user_activities_wrapper {
+        position: fixed;
+        bottom: 2vw;
+        right: 2vw;
+        z-index: 3;
+    }
+
+    .user_activities_wrapper .user_activities button {
+        background: rgb(0, 0, 44);
+        width: 50px !important;
+        height: 50px !important;
+        display: grid;
+        place-content: center;
+        border-radius: 50% !important;
+    }
+</style>
+
+
+<script>
+    window.onscroll = function () {
+        myFunction()
+    };
+
+    function myFunction() {
+        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+            $("nav.navbar").css("background", "rgba(0, 0, 0, .6)")
+        } else {
+            $("nav.navbar").css("background", "transparent")
+        }
+    }
+
+    $(".user_activities .dropdown-menu").css("margin-left", "-140%")
+</script>

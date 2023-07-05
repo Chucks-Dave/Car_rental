@@ -1,0 +1,267 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+
+<div class="col-12 d-flex flex-wrap">
+    <div class="col-12 col-lg">
+        {% include "partials/sidenav.html" %}
+    </div>
+    <div class="main_content">
+
+        <div class="col-12 p-2 d-flex justify-content-between align-items-center mb-3">
+            <h4>Vehicles</h4>
+            <a href="#" class="btn btn-sm manage_brands_btn px-3" data-bs-toggle="modal"
+                data-bs-target="#manageBrandsModal"><i class="fas fa-cogs"></i> Manage Brands</a>
+        </div>
+
+        <!-- ========================================== VEHICLE FILTER OPTIONS ============================================= -->
+        <div class="col-12 d-flex flex-wrap brands p-1 mb-3">
+            <div class="p-1">
+                <a href="{% url 'vehicles' %}" class="btn py-0 px-2 brand_filter">
+                    <small>All</small>
+                </a>
+            </div>
+            {% for brand in brands %}
+            <div class="p-1">
+                <a href="{% url 'filter_vehicle' brand.slug %}" class="btn py-0 px-2 brand_filter">
+                    <small>{{brand.brand_name}}</small>
+                </a>
+            </div>
+            {% endfor %}
+            <div class="p-1">
+                <a href="#" class="btn py-0 px-2 brand_filter active" data-bs-toggle="modal"
+                    data-bs-target="#addBrandModal">
+                    <i class="far fa-plus"></i> <small>Add Brand</small>
+                </a>
+            </div>
+        </div>
+
+
+        <div class="col-12 p-2 d-flex align-items-center mb-3">
+            <input type="search" name="" id="search_vehicles" placeholder="Search vehicles"
+                class="col form-control me-2 bg-transparent">
+            <a href="{% url 'add_vehicle' %}" class="btn btn-sm add_vehicle_btn px-3"><i class="fas fa-plus"></i> Add
+                Vehicle</a>
+        </div>
+
+
+        <!-- ============================================= VEHICLES TABLE ================================================== -->
+        <div class="col-12 d-flex flex-wrap p-2 table_wrapper">
+            <table class="col-12 table table-borderless">
+                <tr>
+                    <th scope="col">Car</th>
+                    <th scope="col">Brand</th>
+                    <th scope="col">Branch</th>
+                    <th scope="col">Model</th>
+                    <th scope="col">Year</th>
+                    <th scope="col">Mileage</th>
+                    <th scope="col">Vin</th>
+                    <th scope="col">Horsepower</th>
+                    <th scope="col">Transmission</th>
+                    <th scope="col">Drive</th>
+                    <th scope="col">Color</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col"></th>
+                </tr>
+                
+                {% if not vehicles %}
+                <tr><th scope="row" class="py-5 text-center">No vehicles</th></tr>
+                {% endif %}
+
+                {% for vehicle in vehicles %}
+                <tr>
+                    <td><a href="{% url 'vehicle_details' vehicle.slug %}" class="text-decoration-none text-dark"><img
+                                src="{{vehicle.image1.url}}" width="35px" height="35px" style="border-radius: 50%;"
+                                alt=""></a></td>
+                    <td><a href="{% url 'vehicle_details' vehicle.slug %}"
+                            class="text-decoration-none text-dark">{{vehicle.brand|truncatechars:11}}</a></td>
+                    <td><a href="{% url 'vehicle_details' vehicle.slug %}"
+                            class="text-decoration-none text-dark">{{vehicle.branch|truncatechars:6}}</a></td>
+                    <td><a href="{% url 'vehicle_details' vehicle.slug %}"
+                            class="text-decoration-none text-dark">{{vehicle.vehicle_model}}</a></td>
+                    <td><a href="{% url 'vehicle_details' vehicle.slug %}"
+                            class="text-decoration-none text-dark">{{vehicle.year}}</a></td>
+                    <td><a href="{% url 'vehicle_details' vehicle.slug %}"
+                            class="text-decoration-none text-dark">{{vehicle.mileage}}</a></td>
+                    <td style="text-transform: uppercase;"><a href="{% url 'vehicle_details' vehicle.slug %}"
+                            class="text-decoration-none text-dark">{{vehicle.vin|truncatechars:8}}</a></td>
+                    <td><a href="{% url 'vehicle_details' vehicle.slug %}"
+                            class="text-decoration-none text-dark">{{vehicle.horsepower}}</a></td>
+                    <td><a href="{% url 'vehicle_details' vehicle.slug %}"
+                            class="text-decoration-none text-dark">{{vehicle.transmission}}</a></td>
+                    <td><a href="{% url 'vehicle_details' vehicle.slug %}"
+                            class="text-decoration-none text-dark">{{vehicle.drive}}_wheel_drive</a></td>
+                    <td><a href="{% url 'vehicle_details' vehicle.slug %}"
+                            class="text-decoration-none text-dark">{{vehicle.color}}</a></td>
+                    <td><a href="{% url 'vehicle_details' vehicle.slug %}"
+                            class="text-decoration-none text-dark">{{vehicle.stock}}</a></td>
+                    <td><a href="{% url 'vehicle_details' vehicle.slug %}" class="text-decoration-none text-primary"><i
+                                class="fas fa-message"></i></a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- ============================================= ADD BRAND ======================================================= -->
+<div class="modal fade" id="addBrandModal" tabindex="-1" aria-labelledby="addBrandModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form class="modal-content" method="post" action="{% url 'add_brand' %}">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="form-floating">
+                    {{brandForm}}
+                    <label for="brand_name">Brand Name:</label>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i>
+                    Cancel</button>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- ========================================== MANAGE BRAND ======================================================= -->
+<div class="modal fade" id="manageBrandsModal" tabindex="-1" aria-labelledby="manageBrandsModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-body">
+                <input type="search" name="" id="search_brands" placeholder="Search brands" class="form-control col-12">
+                <ul class="list-group mt-3 col-12">
+                    {% for brand in brands %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>{{brand.brand_name}}</span>
+                        <div class="d-flex">
+                            <a href="{% url 'edit_brand' brand.slug %}"
+                                class="btn btn-sm btn-outline-primary me-2 edit_brand_btn">
+                                <i class="fas fa-pencil" style="pointer-events: none;"></i>
+                            </a>
+                            <a href="#" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                data-bs-target="#deleteBrandsModal{{brand.id}}">
+                                <i class="fas fa-trash" style="pointer-events: none;"></i>
+                            </a>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% for brand in brands %}
+<!-- ========================================== DELETE BRAND ======================================================= -->
+<div class="modal fade" id="deleteBrandsModal{{brand.id}}" tabindex="-1"
+    aria-labelledby="deleteBrandsModal{{brand.id}}Label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-body">
+                Are you sure you want to delete "{{brand.brand_name}}"
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i>
+                    Cancel</button>
+                <a href="{% url 'delete_brand' brand.slug %}" class="btn btn-danger"><i class="fas fa-trash"></i>
+                    Yes</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+<style>
+    .manage_brands_btn {
+        background: var(--orange) !important;
+        color: white !important;
+        border: 1px solid var(--orange);
+        border-radius: 20px;
+    }
+
+    .add_vehicle_btn {
+        background: #83D7DD !important;
+        color: white !important;
+        border: 1px solid #83D7DD;
+        border-radius: 20px;
+    }
+
+    .brand_filter {
+        color: rgb(0, 0, 44);
+        border: 1px solid rgb(0, 0, 44) !important;
+        border-radius: 20px;
+    }
+
+    .brand_filter.active {
+        background: rgb(0, 0, 44);
+        color: white;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+
+    table tr:first-child {
+        background: #eee;
+    }
+
+    table th {
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+
+    .table_wrapper {
+        overflow-x: scroll;
+    }
+
+    @media screen and (max-width: 992px) {
+        .table_wrapper td {
+            text-align: center;
+        }
+    }
+</style>
+
+<script>
+    $(document).ready(() => {
+        $("#search_brands").on('keyup', (e) => {
+            var results = e.target.parentElement.children[1].children
+            for (let i = 0; i < results.length; i++) {
+                if (!results[i].textContent.toLowerCase().includes(e.target.value.toLowerCase())) {
+                    $(results[i]).addClass("d-none")
+                } else {
+                    $(results[i]).removeClass("d-none")
+                }
+            }
+        })
+        $("#search_vehicles").on('keyup', (e) => {
+            var brand_results = document.querySelectorAll("tr td:nth-child(2)")
+            var model_results = document.querySelectorAll("tr td:nth-child(4)")
+            var year_results = document.querySelectorAll("tr td:nth-child(5)")
+            var vin_results = document.querySelectorAll("tr td:nth-child(7)")
+            var hp_results = document.querySelectorAll("tr td:nth-child(7)")
+            var transmission_results = document.querySelectorAll("tr td:nth-child(8)")
+            var color_results = document.querySelectorAll("tr td:nth-child(11)")
+            for (let i = 0; i < brand_results.length; i++) {
+                var search =
+                    `${brand_results[i].textContent.toLowerCase()} ${model_results[i].textContent.toLowerCase()} ${year_results[i].textContent.toLowerCase()} ${vin_results[i].textContent.toLowerCase()} ${hp_results[i].textContent.toLowerCase()} ${transmission_results[i].textContent.toLowerCase()} ${color_results[i].textContent.toLowerCase()}`
+                if (search.includes(e.target.value.toLowerCase())) {
+                    $(brand_results[i].parentElement).removeClass("d-none")
+                } else {
+                    $(brand_results[i].parentElement).addClass("d-none")
+                }
+            }
+        })
+        $(".edit_brand_btn").click((e) => {
+            $(".edit_brand_modal input").val(e.target.parentElement.parentElement.children[0]
+                .textContent)
+        })
+    })
+</script>
+{% endblock main %}

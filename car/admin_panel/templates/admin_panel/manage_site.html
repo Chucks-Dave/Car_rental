@@ -1,0 +1,330 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+<div class="col-12 d-flex flex-wrap">
+    <div class="col-12 col-lg">
+        {% include 'partials/sidenav.html' %}
+    </div>
+    <div class="main_content">
+        <!-- ===================================================== HEADING ========================================================== -->
+        <div class="col-12 p-2 d-flex align-items-center">
+            <h4>Manage Website</h4>
+            <a href="{% url 'home' %}" class="text-decoration-none ms-auto" style="color: rgb(0, 0, 44);">Go to
+                Website<small><small><i class="fas fa-chevron-right ms-2"></i><i
+                            class="fas fa-chevron-right"></i></small></small></a>
+        </div>
+
+        <!-- ==================================================== PAGE NAV ========================================================== -->
+        <div class="d-flex sticky-top col-12 text-center bg-light px-1" style="z-index: 1;">
+            <a href="#new" class="col text-decoration-none text-dark py-2 me-1"
+                style="border-bottom: 1px solid rgb(0, 0, 44);">New</a>
+            <a href="#about" class="col text-decoration-none text-dark py-2 me-1"
+                style="border-bottom: 1px solid rgb(0, 0, 44);">About</a>
+            <a href="#reviews" class="col text-decoration-none text-dark py-2 me-1"
+                style="border-bottom: 1px solid rgb(0, 0, 44);">Reviews</a>
+            <a href="#faq" class="col text-decoration-none text-dark py-2"
+                style="border-bottom: 1px solid rgb(0, 0, 44);">FAQ</a>
+        </div>
+
+        <div class="row g-4 m-0">
+            <!-- ================================================ NEW CARS ========================================================== -->
+            <div class="col-12 col-md-6" id="new">
+                <div class="card bg-light p-3 border-0 shadow">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5>New Cars</h5>
+                        <a href="#" class="btn btn-info rounded-0 text-white" data-bs-toggle="modal"
+                            data-bs-target="#addNewCarModal"><i class="fas fa-plus"></i></a>
+                    </div>
+                    <ul class="list-group mt-2">
+                        {% for new_car in new_cars %}
+                        <li class="list-group-item bg-light d-flex">{{new_car.vehicle}} <a
+                                href="{% url 'remove_new_car' new_car.id %}" class="ms-auto"><i
+                                    class="fas fa-trash text-danger"></i></a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ================================================ ABOUT US ========================================================== -->
+            <div class="col-12 col-md-6" id="about">
+                <div class="card bg-light p-3 border-0 shadow h-100">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5>About Us</h5>
+
+                        {% if about_details.count is not 0 %}
+
+                        {% for about_detail in about_details %}
+                        <a href="#" class="btn btn-info rounded-0 text-white" data-bs-toggle="modal"
+                            data-bs-target="#editAboutUsModal"><i class="fas fa-pencil"></i></a>
+                        {% endfor %}
+
+                        {% else %}
+                        <a href="#" class="btn btn-info rounded-0 text-white" data-bs-toggle="modal"
+                            data-bs-target="#addAboutUsModal"><i class="fas fa-plus"></i></a>
+                        {% endif %}
+                    </div>
+                    <div class="col-12">
+
+                        {% if about_details.count is 0 %}
+                        <h1 class="fa-solid fa-face-sad-tear text-secondary text-center col-12"></h1>
+                        <p class="text-center">We found no existing data about your company.<br>Please add data about
+                            your company</p>
+                        {% endif %}
+
+                        {% for about_detail in about_details %}
+                        <p class="about_txt">{{about_detail.about_text}}</p>
+                        <ul class="list-group">
+                            <li class="list-group-item bg-light serv1">{{about_detail.service1}}</li>
+                            <li class="list-group-item bg-light serv2">{{about_detail.service2}}</li>
+                            <li class="list-group-item bg-light serv3">{{about_detail.service3}}</li>
+                        </ul>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================= Customer Reviews ======================================================= -->
+            <div class="col-12" id="reviews">
+                <div class="card bg-light p-3 border-0 shadow">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5>Manage Reviews</h5>
+                    </div>
+                    {% for review in reviews %}
+                    <div class="col-12 col-md-10 mx-auto py-2">
+                        <div class="col-12 d-flex">
+                            {% if review.user.profile_image %}
+                            <img src="{{review.user.profile_image.url}}" width="30px" height="30px" alt=""
+                                style="border-radius: 50%;">
+                            {% else %}
+                            <img src="{% static 'images/user_icon.png' %}" width="30px" height="30px" alt=""
+                                style="border-radius: 50%;">
+                            {% endif %}
+                            <span class="ms-2">{{review.user.username}}</span>
+
+                            <form action="{% url 'show_review' review.id %}" method="post" class="ms-auto">
+                                {% csrf_token %}
+                                <input type="checkbox" class="show" name="" id=""
+                                    {% if review.is_active %}checked{% endif %}>
+                                Display
+                            </form>
+                            <a href="{% url 'delete_review' review.id %}" class="text-decoration-none text-danger ms-2">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
+                        </div>
+                        <div class="ms-auto" style="width: calc(100% - 40px) !important;">
+                            <span class="text-muted">
+                                {{review.review}}
+                            </span>
+                        </div>
+                        <hr>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- ==================================================== FAQ ============================================================= -->
+            <div class="col-12 col-md-12 pb-3" id="faq">
+                <div class="card bg-light p-3 border-0 shadow h-100">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5>FAQ</h5>
+                        <a href="#" class="btn btn-info rounded-0 text-white" data-bs-toggle="modal"
+                            data-bs-target="#selectQueryModal"><i class="fas fa-plus"></i></a>
+                    </div>
+                    <div class="row g-2 m-0 py-3">
+                        {% for faq in faqs %}
+                        <div class="col-12 col-md-6">
+                            <div class="faq p-1 col-12">
+                                <div class="question col-12 p-2">
+                                    <small class="text-muted">{{faq.query.message|truncatewords:15}}</small>
+                                </div>
+                                <div class="reply p-2 col-12">
+                                    {{faq.reply}}
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <a href="{% url 'edit_faq' faq.id %}" class="btn btn-outline-info btn-sm"><i
+                                            class="fas fa-pencil"></i> Edit</a>
+                                    <a href="{% url 'delete_faq' faq.id %}"
+                                        class="btn btn-outline-danger btn-sm ms-2"><i class="fas fa-trash"></i>
+                                        Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ========================================== ADD NEW CAR ======================================================= -->
+<div class="modal fade" id="addNewCarModal" tabindex="-1" aria-labelledby="addNewCarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-body">
+                <input type="search" name="" id="search_cars" placeholder="Search cars" class="form-control col-12">
+                <ul class="list-group mt-3 col-12">
+                    {% for vehicle in vehicles %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="car">{{vehicle.brand.brand_name}} {{vehicle.vehicle_model}}</span>
+                        <div class="d-flex">
+                            <a href="{% url 'add_new_car' vehicle.slug %}" class="btn btn-sm btn-outline-info">
+                                <i class="fas fa-plus" style="pointer-events: none;"></i>
+                            </a>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ========================================= ADD ABOUT US ======================================================= -->
+<div class="modal fade" id="addAboutUsModal" tabindex="-1" aria-labelledby="addAboutUsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form action="{% url 'add_about_us' %}" method="post">
+                    {% csrf_token %}
+                    <div class="row gy-2 gx-0">
+                        <div class="form-floating">
+                            {{addAboutUsForm.about_text}}
+                            <label for="id_about_text">Write About Your Company:</label>
+                        </div>
+                        <div class="form-floating">
+                            {{addAboutUsForm.service1}}
+                            <label for="id_service1">First Service Provided:</label>
+                        </div>
+                        <div class="form-floating">
+                            {{addAboutUsForm.service2}}
+                            <label for="id_service2">Second Service Provided:</label>
+                        </div>
+                        <div class="form-floating">
+                            {{addAboutUsForm.service3}}
+                            <label for="id_service3">Third Service Provided:</label>
+                        </div>
+                        <button type="submit" class="btn rounded-0 text-white"
+                            style="background: var(--orange);">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ======================================== EDIT ABOUT US ======================================================= -->
+<div class="modal fade" id="editAboutUsModal" tabindex="-1" aria-labelledby="editAboutUsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-body">
+                {% for about_detail in about_details %}
+                <form action="{% url 'edit_about_us' about_detail.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="row gy-2 gx-0">
+                        <div class="form-floating">
+                            {{addAboutUsForm.about_text}}
+                            <label for="id_about_text">Write About Your Company:</label>
+                        </div>
+                        <div class="form-floating">
+                            {{addAboutUsForm.service1}}
+                            <label for="id_service1">First Service Provided:</label>
+                        </div>
+                        <div class="form-floating">
+                            {{addAboutUsForm.service2}}
+                            <label for="id_service2">Second Service Provided:</label>
+                        </div>
+                        <div class="form-floating">
+                            {{addAboutUsForm.service3}}
+                            <label for="id_service3">Third Service Provided:</label>
+                        </div>
+                        <button type="submit" class="btn rounded-0 text-white"
+                            style="background: var(--orange);">Submit</button>
+                    </div>
+                </form>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ========================================== ADD NEW CAR ======================================================= -->
+<div class="modal fade" id="selectQueryModal" tabindex="-1" aria-labelledby="selectQueryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-body">
+                <input type="search" name="" id="search_queries" placeholder="Search queries"
+                    class="form-control col-12">
+                <ul class="list-group mt-3 col-12">
+                    {% for query in queries %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="query">{{query.message}} ~ {{query.firstname}} {{query.lastname}}</span>
+                        <div class="d-flex">
+                            <a href="{% url 'add_faq' query.id %}" class="btn btn-sm btn-outline-info">
+                                <i class="fas fa-plus" style="pointer-events: none;"></i>
+                            </a>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .card {
+        height: fit-content;
+    }
+
+    .faq {
+        background: white;
+        border-radius: 5px;
+    }
+
+    .question {
+        background: #f5f5f5;
+        border-radius: 5px 5px 0 0;
+    }
+
+    textarea {
+        height: 150px !important;
+    }
+</style>
+
+<script>
+    $("#search_cars").keyup((e) => {
+        var cars = $(".car")
+        for (let i = 0; i < cars.length; i++) {
+            if (cars[i].textContent.toLowerCase().includes(e.target.value.toLowerCase())) {
+                $(cars[i].parentElement).removeClass('d-none')
+            } else {
+                $(cars[i].parentElement).addClass('d-none')
+            }
+        }
+    })
+    $("#search_queries").keyup((e) => {
+        var queries = $(".query")
+        for (let i = 0; i < queries.length; i++) {
+            if (queries[i].textContent.toLowerCase().includes(e.target.value.toLowerCase())) {
+                $(queries[i].parentElement).removeClass('d-none')
+            } else {
+                $(queries[i].parentElement).addClass('d-none')
+            }
+        }
+    })
+    $("#editAboutUsModal #id_about_text").val($(".about_txt").text())
+    $("#editAboutUsModal #id_service1").val($(".serv1").text())
+    $("#editAboutUsModal #id_service2").val($(".serv2").text())
+    $("#editAboutUsModal #id_service3").val($(".serv3").text())
+    $(".show").change((e) => {
+        $(e.target.parentElement).submit()
+    })
+</script>
+{% endblock main %}

@@ -1,0 +1,32 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --orange: #DC2D13;
+    --black: #222;
+    --blue: rgb(0, 0, 44);
+}
+
+body {
+    background: #f5f5f5 !important;
+}
+
+main{
+    width: 100% !important;
+    overflow-x: hidden;
+}
+
+.main_content {
+    width: 80%;
+    max-height: 100vh;
+    overflow-y: scroll;
+}
+
+
+@media screen and (max-width: 992px) {
+    .main_content {
+        width: 100% !important;
+    }
+}

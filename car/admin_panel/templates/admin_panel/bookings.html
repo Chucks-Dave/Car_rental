@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+
+<div class="col-12 d-flex flex-wrap">
+    <!-- SIDEBAR -->
+    <div class="col-12 col-lg">
+        {% include "partials/sidenav.html" %}
+    </div>
+    <div class="main_content">
+        <div class="p-2 py-3">
+            <input type="search" name="search_bookings" id="search_bookings" class="form-control col-12 border-0 shadow-none" placeholder="Search bookings by pick-up date or status">
+        </div>
+        <div class="d-flex flex-wrap col-12 p-1">
+
+            <!-- BOOKINGS -->
+            {% for booking in bookings %}
+            <div class="col-12 col-md-6 col-lg-4 p-2">
+                <div class="p-3 bg-white card border-0">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h5 style="font-size: 19px;"><a href="{% url 'booking_details' booking.id %}" class="text-decoration-none">#{{booking.id}}</a></h5>
+                        <a class="text-danger" href="{% url 'delete_booking' booking.id %}"><i
+                            class="fas fa-trash"></i></a>
+                    </div>
+                    <div class="d-flex align-items-center pt-3">
+
+                        {% if booking.user.profile_image %}
+                        <img src="{{booking.user.profile_image.url}}" alt="" width="35px" height="35px" class="me-3"
+                            style="border-radius: 50%;">
+                        {% else %}
+                        <img src="{% static 'images/user_icon.png' %}" alt="" width="35px" height="35px" class="me-3"
+                            style="border-radius: 50%;">
+                        {% endif %}
+
+                        <h5 style="font-size: 19px;">{{booking.user.username}}</h5>
+                    </div>
+                    <div class="pt-3 d-flex align-items-center">
+                        <span class="text-secondary">Pick-Up Date:</span>
+                        <span class="text-secondary ms-auto pick_up_date">{{booking.pick_up_date}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between py-3">
+                        <span class="text-muted">Status:</span>
+
+                        {% if booking.completed %}
+                        <div class="px-2" style="background: #00ff155d; border-radius: 10px;"><small
+                                class="text-success status">Completed</small></div>
+                        {% else %}
+                        {% if booking.confirmed %}
+                        <div class="px-2" style="background: #ffbb005d; border-radius: 10px;"><small
+                                class="text-warning status">Active</small></div>
+                        {% else %}
+                        <div class="px-2" style="background: #8686865d; border-radius: 10px;"><small
+                                class="text-secondary status">Inactive</small></div>
+                        {% endif %}
+                        {% endif %}
+
+                    </div>
+                    <div class="d-flex flex-wrap align-items-center">
+                        <span class="text-muted col mb-2">Actions:</span>
+
+                        {% if booking.completed %}
+                        <a href="{% url 'complete_booking' booking.id %}" class="px-2 text-decoration-none"
+                            style="background: #8686865d; border-radius: 10px;"><small
+                                class="text-secondary">Booking Incomplete</small></a>
+                        {% else %}
+                        {% if booking.confirmed %}
+                        <a href="{% url 'cancel_booking' booking.id %}" class="px-2 me-1 text-decoration-none"
+                            style="background: #ff00005d; border-radius: 10px;"><small
+                                class="text-danger">Cancel Booking</small></a>
+                        <a href="{% url 'complete_booking' booking.id %}" class="px-2 text-decoration-none"
+                            style="background: #00ff155d; border-radius: 10px;"><small
+                                class="text-success">Complete Booking</small></a>
+                        {% else %}
+                        <a href="{% url 'confirm_booking' booking.id %}" class="px-2 text-decoration-none"
+                            style="background: #00ff155d; border-radius: 10px;"><small
+                                class="text-success">Confirm Booking</small></a>
+                        {% endif %}
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $("#search_bookings").keyup((e) => {
+        var pickupdate = $(".pick_up_date")
+        var status = $(".status")
+
+        for(let i = 0; i < pickupdate.length; i++){
+            search_format = `${pickupdate[i].textContent.toLowerCase()} ${status[i].textContent.toLowerCase()}`
+            if(search_format.includes(e.target.value.toLowerCase())){
+                $(pickupdate[i].parentElement.parentElement.parentElement).removeClass("d-none")
+            }else{
+                $(pickupdate[i].parentElement.parentElement.parentElement).addClass("d-none")
+            }
+        }
+    })
+</script>
+{% endblock %}

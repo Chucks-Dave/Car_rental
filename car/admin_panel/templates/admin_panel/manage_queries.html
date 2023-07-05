@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+<div class="col-12 d-flex flex-wrap">
+    <div class="col-12 col-lg">
+        {% include 'partials/sidenav.html' %}
+    </div>
+    <div class="main_content">
+        <div class="col-12 table_holder p-3">
+            <table class="table">
+                <tr>
+                    <th>Customer</th>
+                    <th>Query</th>
+                    <th>Date</th>
+                    <th colspan="2">Actions</th>
+                </tr>
+                {% for query in queries %}
+                <tr>
+                    <td style="min-width: 200px;">{{query.firstname}} {{query.lastname}}</td>
+                    <td>{{query.message}}</td>
+                    <td style="min-width: 150px;">{{query.date}}</td>
+                    <td><a href="mailto:{{query.email}}" class="text-decoration-none text-muted"><i
+                                class="fas fa-reply"></i> Reply</a></td>
+                    <td>
+                    {% if query.resolved %}
+                    <a href="#" class="text-decoration-none" style="color: limegreen;"><i class="fas fa-check"></i> Resolved</a>
+                    {% else %}
+                    <a href="{% url 'resolved_queries' query.id %}" class="text-decoration-none text-danger"><i class="fas fa-times"></i> Resolved</a>
+                    {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table_holder{
+        overflow-x: scroll;
+    }
+    table td{
+        min-width: 100px;
+    }
+    @media screen and (max-width: 992px) {
+        table tr td:nth-child(2){
+            min-width: 300px;
+        }
+    }
+</style>
+{% endblock main %}

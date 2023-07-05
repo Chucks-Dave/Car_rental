@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+<<<<<<< HEAD
+      <module fileurl="file://$PROJECT_DIR$/.idea/cardeal.iml" filepath="$PROJECT_DIR$/.idea/cardeal.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/.idea/carrent.iml" filepath="$PROJECT_DIR$/.idea/carrent.iml" />
+>>>>>>> bc71a7b (initial commit)
+    </modules>
+  </component>
+</project>

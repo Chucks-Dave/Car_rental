@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+<div class="col-12 d-flex flex-wrap">
+    <div class="col-12 col-lg">
+        {% include 'partials/sidenav.html' %}
+    </div>
+    <div class="main_content">
+        <form action="" method="post" class="col-11 col-md-7 mx-auto py-4" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="d-flex flex-wrap">
+                <div class="col-6 col-md-4 p-1">
+                    <label for="id_image1" class="col-12"
+                        {% if vehicle.image1 %}style="background-image: url('{{vehicle.image1.url}}');" {% endif %}>
+                        <i class="fas fa-plus-circle fs-5"></i>
+                    </label>
+                </div>
+                <div class="col-6 col-md-4 p-1">
+                    <label for="id_image2" class="col-12"
+                        {% if vehicle.image2 %}style="background-image: url('{{vehicle.image2.url}}');" {% endif %}>
+                        <i class="fas fa-plus-circle fs-5"></i>
+                    </label>
+                </div>
+                <div class="col-6 col-md-4 p-1">
+                    <label for="id_image3" class="col-12"
+                        {% if vehicle.image3 %}style="background-image: url('{{vehicle.image3.url}}');" {% endif %}>
+                        <i class="fas fa-plus-circle fs-5"></i>
+                    </label>
+                </div>
+                <div class="col-6 p-1">
+                    <label for="id_image4" class="col-12"
+                        {% if vehicle.image4 %}style="background-image: url('{{vehicle.image4.url}}');" {% endif %}>
+                        <i class="fas fa-plus-circle fs-5"></i>
+                    </label>
+                </div>
+                <div class="col-12 col-md-6 p-1">
+                    <label for="id_image5" class="col-12"
+                        {% if vehicle.image5 %}style="background-image: url('{{vehicle.image5.url}}');" {% endif %}>
+                        <i class="fas fa-plus-circle fs-5"></i>
+                    </label>
+                </div>
+                {{vehicle_form.image1}}
+                {{vehicle_form.image2}}
+                {{vehicle_form.image3}}
+                {{vehicle_form.image4}}
+                {{vehicle_form.image5}}
+            </div>
+            <table class="table table-striped">
+                <tr>
+                    <th scope="row">Brand :</th>
+                    <td>{{vehicle_form.brand}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Model :</th>
+                    <td>{{vehicle_form.vehicle_model}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Available in :</th>
+                    <td>{{vehicle_form.branch}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Stock :</th>
+                    <td>{{vehicle_form.stock}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Year :</th>
+                    <td>{{vehicle_form.year}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Mileage :</th>
+                    <td>{{vehicle_form.mileage}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Vin :</th>
+                    <td>{{vehicle_form.vin}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Horsepower :</th>
+                    <td>{{vehicle_form.horsepower}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Transmission :</th>
+                    <td>{{vehicle_form.transmission}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Door :</th>
+                    <td>{{vehicle_form.door}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Drive :</th>
+                    <td>{{vehicle_form.drive}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Seat :</th>
+                    <td>{{vehicle_form.seat}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Color :</th>
+                    <td>{{vehicle_form.color}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Price :</th>
+                    <td class="d-flex align-items-center"><span class="me-1">$</span>{{vehicle_form.price}}</td>
+                </tr>
+            </table>
+            <button type="submit" class="btn px-4 text-white rounded-0"
+                style="background: var(--orange);">Submit</button>
+        </form>
+    </div>
+</div>
+
+
+<style>
+    label {
+        display: grid;
+        place-content: center;
+        min-height: 20vh;
+        background-color: rgba(185, 185, 185, .1);
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-blend-mode: darken;
+    }
+    label[for="id_trans_image"]{
+        min-height: 40vh;
+    }
+</style>
+
+<script>
+    $(document).ready(() => {
+        $("select").addClass("form-select col-12 bg-transparent")
+
+        console.log($("#id_image1"))
+        $("#id_image1").change((e) => {
+            if (e.target.files[0] != null) {
+                $("label[for='id_image1']").css("background-image",
+                    `url(${URL.createObjectURL(e.target.files[0])})`)
+            } else {
+                $("label[for='id_image1']").css("background-image", `url('')`)
+            }
+        })
+        $("#id_image2").change((e) => {
+            if (e.target.files[0] != null) {
+                $("label[for='id_image2']").css("background-image",
+                    `url(${URL.createObjectURL(e.target.files[0])})`)
+            } else {
+                $("label[for='id_image2']").css("background-image", `url('')`)
+            }
+        })
+        $("#id_image3").change((e) => {
+            if (e.target.files[0] != null) {
+                $("label[for='id_image3']").css("background-image",
+                    `url(${URL.createObjectURL(e.target.files[0])})`)
+            } else {
+                $("label[for='id_image3']").css("background-image", `url('')`)
+            }
+        })
+        $("#id_image4").change((e) => {
+            if (e.target.files[0] != null) {
+                $("label[for='id_image4']").css("background-image",
+                    `url(${URL.createObjectURL(e.target.files[0])})`)
+            } else {
+                $("label[for='id_image4']").css("background-image", `url('')`)
+            }
+        })
+        $("#id_image5").change((e) => {
+            if (e.target.files[0] != null) {
+                $("label[for='id_image5']").css("background-image",
+                    `url(${URL.createObjectURL(e.target.files[0])})`)
+            } else {
+                $("label[for='id_image5']").css("background-image", `url('')`)
+            }
+        })
+    })
+</script>
+{% endblock main %}

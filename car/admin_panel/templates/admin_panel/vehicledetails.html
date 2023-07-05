@@ -1,0 +1,356 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+<div class="col-12 d-flex flex-wrap">
+
+    <!-- ===================================================== SIDEBAR =============================================================== -->
+    <div class="col-12 col-lg">
+        {% include 'partials/sidenav.html' %}
+    </div>
+
+
+    <div class="main_content d-flex flex-wrap">
+        <!-- ================================================= HEADING ============================================================== -->
+        <div class="p-4 col-12 d-flex justify-content-between">
+            <h4><a href="{% url 'vehicles' %}" class="fas fa-angle-left me-2 text-decoration-none text-dark"></a>
+                {{vehicle.brand}} {{vehicle.vehicle_model}}</h4>
+            <div class="d-flex align-items-center">
+                <a href="{% url 'edit_vehicle' vehicle.slug %}" class="btn btn-outline-primary btn-sm me-2">
+                    <i class="fas fa-pencil"></i>
+                </a>
+                <a href="#" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#deleteVehicleModal">
+                    <i class="fas fa-trash"></i>
+                </a>
+            </div>
+        </div>
+
+
+        <!-- ================================================ VEHICLE IMAGES CAROUSEL =============================================== -->
+        <div class="col-12 col-lg-5">
+            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active text-center">
+                        <div class="d-flex align-items-center justify-content-center carousel_image_holder">
+                            <img src="{{vehicle.image1.url}}" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                    {% if vehicle.image2 %}
+                    <div class="carousel-item text-center">
+                        <div class="d-flex align-items-center justify-content-center carousel_image_holder">
+                            <img src="{{vehicle.image2.url}}" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if vehicle.image3 %}
+                    <div class="carousel-item text-center">
+                        <div class="d-flex align-items-center justify-content-center carousel_image_holder">
+                            <img src="{{vehicle.image3.url}}" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if vehicle.image4 %}
+                    <div class="carousel-item text-center">
+                        <div class="d-flex align-items-center justify-content-center carousel_image_holder">
+                            <img src="{{vehicle.image4.url}}" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if vehicle.image5 %}
+                    <div class="carousel-item text-center">
+                        <div class="d-flex align-items-center justify-content-center carousel_image_holder">
+                            <img src="{{vehicle.image5.url}}" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- ============================================= CAROUSEL CONTROLS ================================================ -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+                    data-bs-slide="prev">
+                    <span style="background: rgba(0, 0, 0, 0.5); border-radius: 50%; width: 40px; height: 40px;"
+                        class="d-flex justify-content-center align-items-center">
+                        <span class="fa fa-angle-left fs-4" aria-hidden="true"></span>
+                    </span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                    data-bs-slide="next">
+                    <span style="background: rgba(0, 0, 0, 0.5); border-radius: 50%; width: 40px; height: 40px;"
+                        class="d-flex justify-content-center align-items-center">
+                        <span class="fa fa-angle-right fs-4" aria-hidden="true"></span>
+                    </span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+
+                <!-- =================================== CAROUSEL INDICATORS WITH IMAGES ============================================ -->
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="0" class="active"
+                        aria-current="true" aria-label="Slide 1"
+                        style="background-image: url('{{vehicle.image1.url}}');"></button>
+
+                    {% if vehicle.image2 %}
+                    <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="1"
+                        aria-label="Slide 2" style="background-image: url('{{vehicle.image2.url}}');"></button>
+                    {% endif %}
+
+                    {% if vehicle.image3 %}
+                    <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="2"
+                        aria-label="Slide 3" style="background-image: url('{{vehicle.image3.url}}');"></button>
+                    {% endif %}
+
+                    {% if vehicle.image4 %}
+                    <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="3"
+                        aria-label="Slide 4" style="background-image: url('{{vehicle.image4.url}}');"></button>
+                    {% endif %}
+
+                    {% if vehicle.image5 %}
+                    <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="4"
+                        aria-label="Slide 5" style="background-image: url('{{vehicle.image5.url}}');"></button>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ======================================== VEHICLE SPECIFICATIONS AND FEATURES TABLE ===================================== -->
+        <div class="py-4 px-0 px-lg-3 col-11 col-md-10 col-lg-7 mx-auto">
+            <table class="table table-striped">
+                <tr>
+                    <th scope="row">Brand</th>
+                    <td>{{vehicle.brand.brand_name}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Model</th>
+                    <td>{{vehicle.vehicle_model}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Available in</th>
+                    <td>{{vehicle.branch.branch_location}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Stock</th>
+                    <td>{{vehicle.stock}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Year</th>
+                    <td>{{vehicle.year}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Mileage</th>
+                    <td>{{vehicle.mileage}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Vin</th>
+                    <td>{{vehicle.vin}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Horsepower</th>
+                    <td>{{vehicle.horsepower}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Transmission</th>
+                    <td>{{vehicle.transmission}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Door</th>
+                    <td>{{vehicle.door}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Drive</th>
+                    <td>{{vehicle.drive}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Seat</th>
+                    <td>{{vehicle.seat}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Color</th>
+                    <td>{{vehicle.color}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Price</th>
+                    <td>${{vehicle.price}}</td>
+                </tr>
+            </table>
+        </div>
+
+
+        <!-- ================================================ USER COMMENTS AND TESTIMONIES ========================================= -->
+        <div class="col-12" id="comments">
+            <div class="row g-2 m-0 p-2">
+
+                <h4 class="my-3">Manage Testimonies</h4>
+
+                
+                <!-- ============================================= IF NO COMMENTS =================================================== -->
+                {% if not vehicle.comments.all %}
+                <p class="py-5 text-center">No comments</p>
+                {% endif %}
+                    
+
+                <!-- ================================================ COMMENTS ====================================================== -->
+                {% for comment in vehicle.comments.all %}
+                <div class="card col-12 col-md-6 p-1 bg-transparent border-0">
+                    <div class="row g-0 p-3">
+                        <div style="width: fit-content !important;">
+                            {% if comment.user.profile_image %}
+                            <img src="{{comment.user.profile_image.url}}" class="img-fluid"
+                                style="width: 70px !important; height: 70px !important; border-radius: 50%;" alt="...">
+                            {% else %}
+                            <img src="{% static 'images/user_icon.png' %}" class="img-fluid"
+                                style="width: 70px !important; height: 70px !important; border-radius: 50%;" alt="...">
+                            {% endif %}
+                        </div>
+                        <div class="col">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="card-title">{{comment.user.username}}</h5>
+                                    <div class="dropdown">
+                                        <button class="btn" type="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            <i class="fas fa-ellipsis-vertical text-secondary"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a href="{% url 'show_comment_in_site' comment.id %}"
+                                                    class="dropdown-item">
+                                                    <input type="checkbox" name="should_show" id=""
+                                                        {% if comment.should_show %}checked{% endif %}
+                                                        style="pointer-events: none;"> Show on website
+                                                </a>
+                                            </li>
+                                            <li><a class="dropdown-item text-danger" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteCommentModal{{comment.id}}"><i
+                                                        class="fas fa-trash"></i> Delete comment</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex text-warning mb-3 ratings_holder">
+                                    <div class="rating d-none">{{comment.rating}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="card-text text-muted">{{comment.comment}}</p>
+                    </div>
+                </div>
+
+                
+
+                <!-- ======================================================== DELETE COMMENT MODAL ================================================== -->
+                <div class="modal fade" id="deleteCommentModal{{comment.id}}" tabindex="-1" aria-labelledby="deleteCommentModal{{comment.id}}Label"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                Are you sure you want to delete <b>{{comment.user.username}}</b>'s comment
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                                        class="fas fa-times"></i>
+                                    Cancel</button>
+                                <a href="{% url 'delete_comment' comment.id %}" class="btn btn-danger"><i
+                                        class="fas fa-trash"></i>
+                                    Yes</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ======================================================== DELETE VEHICLE MODAL ================================================== -->
+<div class="modal fade" id="deleteVehicleModal" tabindex="-1" aria-labelledby="deleteVehicleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-body">
+                Are you sure you want to delete "{{vehicle.brand.brand_name}} {{vehicle.vehicle_model}}"
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i>
+                    Cancel</button>
+                <a href="{% url 'delete_vehicle' vehicle.slug %}" class="btn btn-danger"><i class="fas fa-trash"></i>
+                    Yes</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+    .carousel-item .carousel_image_holder {
+        height: 80vh;
+        padding-top: 5vh;
+        background: #f3f3f3;
+    }
+
+    .carousel-item img {
+        max-height: 70vh;
+    }
+
+    .carousel-indicators {
+        position: static !important;
+        overflow-x: scroll !important;
+    }
+
+    .carousel-indicators button {
+        width: 50px !important;
+        height: 50px !important;
+        background-color: transparent !important;
+        background-size: cover !important;
+        background-repeat: no-repeat !important;
+    }
+
+    table th {
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    @media screen and (max-width: 992px) {
+        .carousel-item .carousel_image_holder {
+            height: fit-content;
+            margin-top: 0vh !important;
+        }
+
+        .carousel-item img {
+            height: 60vh;
+            max-height: 60vh;
+        }
+    }
+</style>
+
+<script>
+    var indicators = $(".carousel-indicators button")
+    for (let i = 0; i < indicators.length; i++) {
+        $(indicators[i]).attr("data-bs-slide-to", i)
+    }
+
+    var ratings = $(".rating")
+
+    for (let i = 0; i < ratings.length; i++) {
+        var rating = parseInt($(ratings[i]).text())
+        for (let a = 0; a < rating; a++) {
+            var icon_solid = document.createElement("i")
+            $(icon_solid).addClass("fas fa-star")
+            $(ratings[i].parentElement).append(icon_solid)
+        }
+        for (let b = 0; b < 5 - rating; b++) {
+            var icon_regular = document.createElement("i")
+            $(icon_regular).addClass("far fa-star")
+            $(ratings[i].parentElement).append(icon_regular)
+        }
+    }
+</script>
+{% endblock main %}

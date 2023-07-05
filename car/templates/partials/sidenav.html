@@ -1,0 +1,114 @@
+<!-- SIDENAV -->
+<div class="sidenav col-12 p-3 p-md-4 d-flex flex-wrap align-items-center">
+    <h4 class="text-white">FAST CARS</h4>
+    <ul class="p-0 m-0 col-12" id="links1">
+        <li class="col-12"><a href="{% url 'dashboard' %}" class="text-decoration-none text-light btn text-start col-12 my-1"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</a></li>
+        <li class="col-12"><a href="{% url 'branches' %}" class="text-decoration-none text-light btn text-start col-12 my-1"><i class="fa-solid fa-code-branch me-2"></i>Branches</a></li>
+        <li class="col-12"><a href="{% url 'vehicles' %}" class="text-decoration-none text-light btn text-start col-12 my-1"><i class="fa-solid fa-car me-2"></i>Vehicles</a></li>
+        <li class="col-12"><a href="{% url 'bookings' %}" class="text-decoration-none text-light btn text-start col-12 my-1"><i class="fa-solid fa-book-open me-2"></i>Bookings</a></li>
+        <li class="col-12"><a href="{% url 'manage_queries' %}" class="text-decoration-none text-light btn text-start col-12 my-1"><i class="fa-solid fa-question-circle me-2"></i>Queries</a></li>
+        <li class="col-12"><a href="{% url 'registered_users' %}" class="text-decoration-none text-light btn text-start col-12 my-1"><i class="fa-solid fa-users me-2"></i>Manage Users</a></li>
+        <li class="col-12"><a href="{% url 'manage_site' %}" class="text-decoration-none text-light btn text-start col-12 my-1"><i class="fa-solid fa-globe me-2"></i>Manage Website</a></li>
+    </ul>
+    <ul class="p-0 m-0 col-12" id="links2">
+        <li class="col-12"><a href="{% url 'edit_profile' %}" class="text-decoration-none text-light btn text-start col-12 my-1"><i class="fa-solid fa-user-gear me-2"></i>Manage Account</a></li>
+        <li class="col-12"><a href="{% url 'logout' %}" class="text-decoration-none text-light btn text-start col-12 my-1"><i class="fa-solid fa-right-from-bracket me-2"></i>Logout</a></li>
+    </ul>
+</div>
+
+<button class="btn sidebar-toggler text-white d-block d-lg-none"><i class="fas fa-bars"></i></button>
+
+
+<!-- STYLES -->
+<style>
+    .sidenav{
+        height: 100vh;
+        background: rgb(0, 0, 44);
+    }
+    .sidenav ul li{
+        list-style: none;
+    }
+    .sidenav ul li a:hover{
+        border-color: rgba(255, 255, 255, .1);
+    }
+    .sidenav ul li a.active{
+        background: rgba(255, 255, 255, .1);
+        border-color: rgba(255, 255, 255, .1);
+    }
+    .sidebar-toggler{
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        position: fixed;
+        bottom: 5vw;
+        right: 5vw;
+        background: rgb(0, 0, 44) !important;
+        border-radius: 50%;
+        z-index: 3;
+    }
+    .sidebar-toggler.active{
+        height: 100vh;
+        right: 0;
+        bottom: 0;
+        border-radius: 0;
+        background: rgba(255, 255, 255, .5) !important;
+        color: rgb(0, 0, 44) !important;
+    }
+
+    @media screen and (max-width: 992px) {
+        .sidenav{
+            width: 40%;
+            position: fixed;
+            left: -40%;
+            transition: .1s;
+            z-index: 3;
+        }
+        .sidenav.active{
+            left: 0;
+        }
+        .sidebar-toggler.active{
+            width: 60%;
+        }
+        .sidebar-toggler.active i{
+            display: none;
+        }
+    }
+    @media screen and (max-width: 767px) {
+        .sidenav{
+            width: 75%;
+            left: -75%;
+        }
+        .sidebar-toggler.active{
+            width: 25%;
+        }
+        .sidebar-toggler.active i{
+            display: block;
+        }
+    }
+</style>
+
+<!-- SCRIPTS -->
+<script>
+    $(document).ready(function(){
+        $("button.sidebar-toggler").click(() => {
+            $(".sidenav").toggleClass("active")
+            $("button.sidebar-toggler").toggleClass("active")
+        })
+
+        if(window.location.pathname.split("dashboard").length > 1){
+            $("#links1 li:nth-child(1) a").addClass("active")
+        }else if(window.location.pathname.split("branches").length > 1){
+            $("#links1 li:nth-child(2) a").addClass("active")
+        }else if(window.location.pathname.split("vehicles").length > 1){
+            $("#links1 li:nth-child(3) a").addClass("active")
+        }else if(window.location.pathname.split("bookings").length > 1){
+            $("#links1 li:nth-child(4) a").addClass("active")
+        }else if(window.location.pathname.split("customer_queries").length > 1){
+            $("#links1 li:nth-child(5) a").addClass("active")
+        }else if(window.location.pathname.split("registered_users").length > 1){
+            $("#links1 li:nth-child(6) a").addClass("active")
+        }else if(window.location.pathname.split("manage_site").length > 1){
+            $("#links1 li:nth-child(7) a").addClass("active")
+        }
+    })
+</script>

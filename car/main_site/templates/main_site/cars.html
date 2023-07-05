@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+{% include "partials/navbar.html" %}
+<div class="col-12">
+    <!-- ======================================================= HERO BANNER =========================================================== -->
+    <section class="hero-banner d-flex align-items-center justify-content-start">
+        <div class="container">
+            <h2 class="text-white">Our Fleet</h2>
+            <div class="d-flex text-white align-items-center">
+                <a href="{% url 'home' %}">Home</a>
+                <small><small class="fas fa-chevron-right mx-1"></small></small>
+                <a href="{% url 'cars' %}">Cars</a>
+                <small><small class="fas fa-chevron-right mx-1"></small></small>
+                <a href="#"><span class="brand">{{brand.brand_name}}</span> <span class="all">All</span></a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- =================================================== OUR VEHICLE FLEET ========================================================= -->
+    <section class="fleet col-11 col-md-12 mx-auto container py-5" id="vehicles">
+        <div class="d-flex mb-5 filters">
+            <a href="{% url 'cars' %}" class="btn btn-sm btn-outline-dark me-2">All</a>
+            {% for brand in brands %}
+            <a href="{% url 'cars_by_brand' brand.slug %}" class="btn btn-sm btn-outline-dark me-2">{{brand.brand_name}}</a>
+            {% endfor %}
+        </div>
+        <div class="row g-3">
+            {% for vehicle in vehicles %}
+            <div class="col-12 col-md-6 col-lg-4">
+                <a href="{% url 'car_details' vehicle.slug %}"
+                    class="card text-bg-dark border-0 d-flex justify-content-center align-items-center">
+                    <img src="{{vehicle.image1.url}}" class="card-img h-100" alt="..."
+                        style="filter: brightness(50%); width: fit-content !important;">
+                    <div class="card-img-overlay d-flex align-items-end">
+                        <div class="col">
+                            <h5 class="card-title">{{vehicle.brand.brand_name}} {{vehicle.vehicle_model}}</h5>
+                            <div class="d-flex justify-content-start">
+                                <div class="pe-2 text-center text-white">
+                                    <img src="{% static 'images/car_wheel.png' %}" width="20px" height="20px"
+                                        style="filter: invert(100%);" alt="" class="img-fluid">
+                                    <p class="mt-1">{{vehicle.drive}}</p>
+                                </div>
+                                <div class="pe-2 text-center text-white">
+                                    <img src="{% static 'images/transmission.png' %}" width="20px" height="20px"
+                                        style="filter: invert(100%);" alt="" class="img-fluid">
+                                    <p class="mt-1">
+                                        {% if vehicle.transmission == "manual" %}
+                                        man
+                                        {% else %}
+                                        auto
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                <div class="pe-2 text-center text-white">
+                                    <img src="{% static 'images/engine.jpg' %}" width="20px" height="20px"
+                                        style="filter: invert(100%);" alt="" class="img-fluid">
+                                    <p class="mt-1">{{vehicle.horsepower}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-white text-end d-flex align-items-center">$<span
+                                    class="fs-1">{{vehicle.price}}</span></span>
+                            <small>per day</small>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+
+            <!-- ============================================== PAGINATION ============================================================= -->
+            <nav style="background: none !important;" aria-label="Page navigation example">
+                <ul class="pagination my-5">
+                    {% if vehicles.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link rounded-0 border-0 text-dark" href="?page=1" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link rounded-0 border-0 text-dark" href="?page={{vehicles.previous_page_number}}" aria-label="Previous">
+                            <span aria-hidden="true"></span></a>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link rounded-0 border-0 text-dark" href="?page=1" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link rounded-0 border-0 text-dark" href="?page=1" aria-label="Previous">
+                            <span aria-hidden="true">
+                                <small><small><</small></small>
+                            </span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% for page in pages %}
+                    <li class="page-item current">
+                        <a href="?page={{forloop.counter}}" class="page-link rounded-0 border-0 text-dark">
+                            {{forloop.counter}}
+                        </a>
+                    </li>
+                    {% endfor %}
+
+
+                    {% if vehicles.has_next %}
+                    <li class="page-item">
+                        <a class="page-link rounded-0 border-0 text-dark" href="?page={{vehicles.next_page_number}}" aria-label="Previous">
+                            <span aria-hidden="true"><small><small>></small></small></span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link rounded-0 border-0 text-dark" href="?page={{vehicles.paginator.num_pages}}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link rounded-0 border-0 text-dark" href="?page={{vehicles.paginator.num_pages}}" aria-label="Previous">
+                            <span aria-hidden="true"><small><small>></small></small></span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link rounded-0 border-0 text-dark" href="?page={{vehicles.paginator.num_pages}}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </section>
+
+</div>
+{% include "partials/footer.html" %}
+
+
+<style>
+    .hero-banner {
+        max-width: 100vw;
+        height: 50vh;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-blend-mode: darken;
+        background-color: rgba(0, 0, 0, .5);
+        background-image: url('{% static "images/form_side_image.jpg" %}');
+        clip-path: polygon(0% 0%, 100% 0, 100% 90%, 50% 100%, 0% 90%);
+    }
+
+    .hero-banner a {
+        text-decoration: none;
+        color: #f5f5f5;
+        transition: .1s;
+    }
+
+    .hero-banner a:hover{
+        color: var(--orange);
+    }
+
+    .fleet .card {
+        height: 300px;
+        overflow: hidden;
+        transition: .3s;
+        box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    }
+
+    section h2 span {
+        color: var(--orange);
+    }
+
+    .pagination{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 0 !important;
+    }
+    .pagination .page-item{
+        margin: 0 5px;
+        box-shadow: 3px 3px 0px 0px #ccc;
+    }
+</style>
+
+<script>
+    $(".carousel-wrapper").height($(".hero-banner").height())
+    $(".carousel-item:first-child").addClass('active')
+
+    if($(".brand").text() == ""){
+        $(".brand").addClass('d-none')
+        $(".all").removeClass('d-none')
+    }else{
+        $(".brand").removeClass('d-none')
+        $(".all").addClass('d-none')
+    }
+    
+</script>
+{% endblock main %}
